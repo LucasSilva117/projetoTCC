@@ -4,7 +4,7 @@ $funcao = "";
 $funcao = $_GET["funcao"];
 $tipo=$_POST["tipo"];
 
-
+//funções de cadstrar, alterar e excluir usuarios. OBS: não utilizar por enquanto
 /*if ($funcao == "cadastrar") {
     $cpf = $_POST['cpf'];
     $nome = $_POST['nome'];
