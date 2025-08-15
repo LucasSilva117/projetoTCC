@@ -1,5 +1,6 @@
 <?php 
 include('protectR.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -8,76 +9,66 @@ include('protectR.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restrita recepcionista</title>
-    <style>
-    body {
-      background-color: #f0f2f5;
-      font-family: Arial, sans-serif;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
-    #bemvindo {
-      margin-bottom: 30px;
-      color: #1e4b5d;
-      text-align: center;
-    }
-
-    .formulario{
-        text-align: center;
-    }
-
-    .inputs{
-        text-align: left;
-    }
-
-    form {
-        background-color: #fff;
-        padding: 15px;
-        border: 2px solid #1e4b5d;
-        border-radius: 8px;
-        max-width: 400px;
-        margin: 30px; 
-        margin-bottom: 20px;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-
-    button{
-      width: 50%;
-      padding: 10px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    select {
-        height: 30px;
-        font-size: 15px;
-        border-radius: 10px;
-    }
-  </style>
 </head>
 
 <body>
-    <h1>Recepção</h1>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-md">
+      <h1 style="color: white;">Recepção</h1>
+      <p><a href="logout.php">Sair</a></p>
+    </div>
+  </nav>
 
-    <p><a href="logout.php">Sair</a></p>
+<div class="container-lg">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4>Lista de espera para triagem</h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>RG/SUS</th>
+              <th>Nome</th>
+              <th>idade</th>
+              <th>DN</th>
+              <th>Sexo</th>
+              <th>Ação</th>
+            </tr>
+            </thead>
+            
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+      <a href="cadpaciente.php">
+        <button class="btn btn-primary">
+          <p>Cadastrar novo paciente</p>
+        </button>
+      </a>
+      <a href="adpaciente.php">
+        <button class="btn btn-success">
+          <p>Adicionar Paciente à lista</p>
+        </button>
+      </a>
+      <a href="listapacientes.php">
+        <button class="btn btn-info">
+          <p>Lista de pacientes cadastrados</p>
+        </button>
+      </a>
+</div>
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>

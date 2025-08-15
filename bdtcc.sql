@@ -1,8 +1,8 @@
-    CREATE DATABASE tcc;
-    use tcc;
+    CREATE DATABASE bdtcc;
+    use bdtcc;
 
     create TABLE pacientes(
-    RGSUSP varchar(11) primary key,
+    RGSUSP varchar(15) primary key,
     nomeP varchar(100),
     datanascP date,
     idadeP int, 
@@ -27,9 +27,9 @@
     create TABLE atendimentos(
     codAten varchar(20) primary key,
     CPFRf varchar(11),
-    RGSUSPf varchar(11),
+    RGSUSPf varchar(15),
     dataA date,
-    hora int, 
+    hora time, 
     statusA varchar(100),
     ordem varchar(100),
     FOREIGN KEY (CPFRf) REFERENCES recepcionistas(CPFR),
