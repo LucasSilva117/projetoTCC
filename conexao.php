@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db = "prototipotcclogin";
+$db = "bdtcc";
 $port = 3306;
 
 // Aqui a variável $conn recebe a conexão:

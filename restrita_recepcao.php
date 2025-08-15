@@ -75,9 +75,9 @@ include('protectR.php');
   </style>
 </head>
 
-
 <body>
-    <h1>Olá, você esta na recepção</h1>
+    <h1>Recepção</h1>
+
     <p><a href="logout.php">Sair</a></p>
 </body>
 </html>

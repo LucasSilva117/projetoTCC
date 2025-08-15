@@ -66,6 +66,9 @@ if ($funcao == "logar") {
  
             //header("Location: restrita_recepcao.php");
             echo "<script>alert('recepcionista logado com sucesso!!');location.href='restrita_recepcao.php';</script>";
+        } 
+        else {
+        echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
         }
     }
     else if($tipo=='enfermeiro'){
@@ -87,10 +90,11 @@ if ($funcao == "logar") {
             //header("Location: restrita_triagem.php");
             echo "<script>alert('enfermeiro logado com sucesso!!');location.href='restrita_triagem.php';</script>";
         }
+        else {
+        echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
+        }
     }
         
-     else {
-        echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
-    }
+    
 }
 ?>
