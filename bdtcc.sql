@@ -2,11 +2,12 @@
     use bdtcc;
 
     create TABLE pacientes(
-    RGSUSP varchar(15) primary key,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    RGSUSP varchar(15),
     nomeP varchar(100),
     datanascP date,
     idadeP int, 
-    telefoneP int, 
+    telefoneP varchar(15), 
     sexoP varchar(10),
     enderecoP varchar(100),
     munResP varchar(100),

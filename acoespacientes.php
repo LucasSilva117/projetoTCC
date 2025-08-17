@@ -1,29 +1,51 @@
 <?php 
 include('conexao.php');
 
-if(!isset($_POST['cadastrar_paciente'])){
-    $RGSUSP = $_POST['RGSUSP'];
-    $nomeP = $_POST['nomeP'];
-    $datanascP = $_POST['datanascP'];
-    $idadeP = $_POST['idadeP'];
-    $telefoneP = $_POST['telefoneP'];
-    $sexoP = $_POST['sexoP'];
-    $enderecoP = $_POST['enderecoP'];
-    $munResP = $_POST['munResP'];
-    $UFP = $_POST['UFP'];
+if(isset($_POST['cadastrar_paciente'])){
+    $RG = $_POST['RGSUSP'] ?? null;
+    $nome = $_POST['nomeP'] ?? null;;
+    $datanasc = $_POST['datanascP'] ?? null;;
+    $idade = $_POST['idadeP'] ?? null;;
+    $telefone = $_POST['telefoneP'] ?? null;;
+    $sexo = $_POST['sexoP'] ?? null;;
+    $endereco = $_POST['enderecoP'] ?? null;;
+    $munRes = $_POST['munResP'] ?? null;;
+    $UF = $_POST['UFP'] ?? null;;
 
-//ta dando erro, não ta enviando os dados
-//ARRUMAR ISSO LOGO
-    $sql = "INSERT INTO pacientes(RGSUSP, nomeP, datanascP, idadeP, telefoneP, sexoP, enderecoP, munResP, UFP) VALUES ('$RGSUSP','$nomeP','$datanascP','$idadeP','$telefoneP','$sexoP','$enderecoP','$munResP','$UFP')";
-    $res = $conn->query($sql);
 
-    if($res==true){
+    if (empty($RG)) {
+        die("O campo RGSUSP é obrigatório.");
+    }
+
+    $sql = "INSERT INTO pacientes(RGSUSP, nomeP, datanascP, idadeP, telefoneP, sexoP, enderecoP, munResP, UFP) VALUES ('$RG','$nome','$datanasc','$idade','$telefone','$sexo','$endereco','$munRes','$UF')";
+    mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) > 0){
         echo "<script>alert('Cadastro realizado com sucesso!!'); location.href='restrita_recepcao.php'; </script>";
     } else {
-        echo "<script>alert('Não foi possível cadastrar!!'); history.back(-1);</script>";
+        $erro = mysqli_errno($conn);
+
+        if ($erro == 1062) {
+            // Erro de duplicidade
+            echo "<script>alert('Erro: Já existe um paciente com esse RG/SUS!'); history.back();</script>";
+        } else {
+            // Outro erro qualquer
+            echo "Erro no banco: " . mysqli_error($conn);
+        }
     }
-} else{
-    echo 'aaaaaaaaa erroooo';
-}
+} 
+
+if(isset($_POST['excluir_paciente'])){
+    $paciente_id = mysqli_real_escape_string($conn, $_POST['excluir_paciente']);
+    $sql = "DELETE FROM pacientes WHERE id = '$paciente_id'";
+    mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) > 0){
+        echo "<script>alert('Paciente excluido com sucesso!!');location.href='lista_pacientes.php';</script>";
+    } else {
+        echo "<script>alert('Não foi possivel excluir esse paciente!!');location.href='lista_pacientes.php';</script>";
+    }
+}   
+
 
 ?>

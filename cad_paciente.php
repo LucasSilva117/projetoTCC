@@ -30,47 +30,47 @@ include('protectR.php');
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form action="acoespacientes.php" method="$_POST" class="row g-3">
+                    <form action="acoespacientes.php" method="post" class="row g-3">
                         <div class="col-md-6">
                             <label>RG/SUS</label>
-                            <input type="text" name="RGSUSP" class="form-control" placeholder="N° RG ou N° SUS">
+                            <input type="text" name="RGSUSP" class="form-control" placeholder="N° RG ou N° SUS" required>
                         </div>
                         <div class="col-md-6">
                             <label>Nome</label>
-                            <input type="text" name="nomeP" class="form-control" placeholder="Nome completo">
+                            <input type="text" name="nomeP" class="form-control" placeholder="Nome completo" required>
                         </div>
                         <div class="col-md-2">
                             <label>Data de nascimento</label>
-                            <input type="date" name="datanascP" class="form-control">
+                            <input type="date" name="datanascP" class="form-control" required>
                         </div>
                         <div class="col-md-2">
                             <label>Idade</label>
-                            <input type="number" name="idadeP" class="form-control">
+                            <input type="number" name="idadeP" class="form-control" required>
                         </div>
                         <div class="col-md-4">
                             <label>Telefone</label>
-                            <input type="text" name="telefoneP" class="form-control" placeholder="13999999999">
+                            <input type="text" name="telefoneP" class="form-control" placeholder="1399999999">
                         </div>
                         <div class="col-md-4">
-                            <label for="funcao">Sexo</label>
-                                <select name="sexoP" class="form-select">
-                                    <option value="">Selecione...</option>
-                                    <option value="masculino">Masculino</option>
-                                    <option value="Feminino">Feminino</option>
-                                    <option value="Outro">Outro</option>
-                                </select>
+                            <label>Sexo</label>
+                            <select name="sexoP" class="form-select" required>
+                                <option value="">Selecione...</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Outro">Outro</option>
+                            </select>
                         </div>
                         <div class="col-md-12">
                             <label>Endereço</label>
-                            <input type="text" name="enderecoP" class="form-control" placeholder="Rua, Bairro, complemento, N°">
+                            <input type="text" name="enderecoP" class="form-control" placeholder="Rua, Bairro, complemento, N°" required>
                         </div>
                         <div class="col-md-8">
                             <label>Município de residência</label>
-                            <input type="text" name="munResP" class="form-control" placeholder="Iguape">
+                            <input type="text" name="munResP" class="form-control" placeholder="Iguape" required>
                         </div>
                         <div class="col-md-4">
                             <label>UF</label>
-                            <input type="text" name="sexoP" class="form-control" placeholder="SP, RJ, PR...">
+                            <input type="text" name="UFP" class="form-control" placeholder="SP, RJ, PR..." required>
                         </div>
                         <div class="mb-3">
                             <button type="submit" name="cadastrar_paciente" class="btn btn-primary">Salvar</button>

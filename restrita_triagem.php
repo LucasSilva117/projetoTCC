@@ -80,7 +80,7 @@ include('protectT.php');
 
 <body>
     <h1>Olá, você está na sala de triagem</h1>
-    <p><a href="logout.php">Sair</a></p>
+    <p><a href="logout.php">Sair da conta</a></p>
 </body>
 </html>
 

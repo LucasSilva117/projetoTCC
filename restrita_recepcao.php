@@ -17,11 +17,16 @@ include('protectR.php');
   <nav class="navbar navbar-dark bg-dark">
     <div class="container-md">
       <h1 style="color: white;">Recepção</h1>
-      <p><a href="logout.php">Sair</a></p>
+      <p><a href="logout.php">Sair da conta</a></p>
     </div>
   </nav>
 
 <div class="container-lg">
+      <div class="mx-2 my-1">
+        <a href="cad_paciente.php" class="btn btn-primary">Cadastrar novo paciente</a>
+        <a href="ad_paciente.php" class="btn btn-success">Adicionar Paciente à lista</a>
+        <a href="lista_pacientes.php" class="btn btn-info">Lista de pacientes cadastrados</a>
+      </div>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -47,21 +52,7 @@ include('protectR.php');
       </div>
     </div>
   </div>
-      <a href="cadpaciente.php">
-        <button class="btn btn-primary">
-          <p>Cadastrar novo paciente</p>
-        </button>
-      </a>
-      <a href="adpaciente.php">
-        <button class="btn btn-success">
-          <p>Adicionar Paciente à lista</p>
-        </button>
-      </a>
-      <a href="listapacientes.php">
-        <button class="btn btn-info">
-          <p>Lista de pacientes cadastrados</p>
-        </button>
-      </a>
+      
 </div>
 
 
@@ -69,6 +60,6 @@ include('protectR.php');
 
 
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>
