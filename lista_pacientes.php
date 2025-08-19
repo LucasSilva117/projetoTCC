@@ -60,8 +60,7 @@ include('conexao.php');
                                     <td><?=date('d/m/Y', strtotime($paciente['datanascP']))?></td>
                                     <td><?=$paciente['sexoP']?></td>
                                     <td>
-                                        <a href="ver_paciente.php?id=<?=$paciente['id']?>" class="btn btn-secondary btn-sm">Visualizar</a>
-                                        <a href="" class="btn btn-success btn-sm">Editar</a>
+                                        <a href="ver_paciente.php?id=<?=$paciente['id']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
                                         <form action="acoespacientes.php" method="post" class="d-inline">
                                             <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_paciente" value="<?=$paciente['id']?>" class="btn btn-danger btn-sm">
                                                 Excluir

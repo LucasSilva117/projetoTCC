@@ -96,6 +96,7 @@ include('conexao.php');
                                 <?=$paciente['UFP'];?>
                             </p>
                         </div>
+                        <a href="editar_paciente.php?id=<?=$paciente['id']?>" class="btn btn-success btn-sm col-md-2">Editar</a>
                         <?php 
                             }
                         } else{
