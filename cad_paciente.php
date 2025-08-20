@@ -55,7 +55,7 @@ include('protectR.php');
                             <label>Sexo</label>
                             <select name="sexoP" class="form-select" required>
                                 <option value="">Selecione...</option>
-                                <option value="masculino">Masculino</option>
+                                <option value="Masculino">Masculino</option>
                                 <option value="Feminino">Feminino</option>
                                 <option value="Outro">Outro</option>
                             </select>

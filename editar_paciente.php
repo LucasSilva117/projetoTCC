@@ -35,13 +35,14 @@ include('conexao.php');
                         if (isset($_GET['id'])) {
                             $paciente_id = mysqli_real_escape_string($conn, $_GET['id']);
                             $sql = "SELECT * FROM pacientes WHERE id='$paciente_id'";
-                            $result = $conn->query($sql);
+                            $query = mysqli_query($conn, $sql);
 
-                            if ($result && $result->num_rows > 0) {
+                            if (mysqli_num_rows($query) > 0) {
                                 //erro aqui, nao ta chegando o sexoP
-                                $paciente = mysqli_fetch_array($result);
-                                $row = $result->fetch_assoc();
-                                $sexoP = $row['sexoP'];
+                                $paciente = mysqli_fetch_array($query);
+                                
+                                $sexoP = $paciente['sexoP'];
+
 
                         ?>
                                 <form action="acoespacientes.php" method="post" class="row g-3">
@@ -64,13 +65,13 @@ include('conexao.php');
                                     </div>
                                     <div class="col-md-4">
                                         <label>Telefone</label>
-                                        <input type="text" name="telefoneP" value="<?=$paciente['telefoneP'];?>" class="form-control" placeholder="1399999999">
+                                        <input type="text" name="telefoneP" value="<?= !empty($paciente['telefoneP']) ? $paciente['telefoneP'] : ''; ?>" class="form-control" placeholder="<?= !empty($paciente['telefoneP']) ? $paciente['telefoneP'] : 'Telefone não cadastrado'; ?>">
                                     </div>
                                     <div class="col-md-4">
                                         <label>Sexo</label>
                                         <select name="sexoP" class="form-select" required>
                                             <option value="">Selecione...</option>
-                                            <option value="masculino" <?= ($sexoP == "Masculino") ? "selected" : "" ?>>Masculino</option>
+                                            <option value="Masculino" <?= ($sexoP == "masculino") ? "selected" : "" ?>>Masculino</option>
                                             <option value="Feminino" <?= ($sexoP == "Feminino") ? "selected" : "" ?>>Feminino</option>
                                             <option value="Outro" <?= ($sexoP == "Outro") ? "selected" : "" ?>>Outro</option>
                                         </select>

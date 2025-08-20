@@ -3,11 +3,11 @@
 
     create TABLE pacientes(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    RGSUSP varchar(15),
+    RGSUSP varchar(15) NOT NULL UNIQUE,
     nomeP varchar(100),
     datanascP date,
     idadeP int, 
-    telefoneP varchar(15), 
+    telefoneP BIGINT, 
     sexoP varchar(10),
     enderecoP varchar(100),
     munResP varchar(100),
@@ -19,19 +19,18 @@
     nomeR varchar(100),
     datanascR date,
     idadeR int, 
-    telefoneR int, 
+    telefoneR BIGINT, 
     sexoR varchar(10),
     senha varchar(255)
     ); 
     
     
     create TABLE atendimentos(
-    codAten varchar(20) primary key,
+    codAten int AUTO_INCREMENT PRIMARY KEY,
     CPFRf varchar(11),
     RGSUSPf varchar(15),
     dataA date,
     hora time, 
-    statusA varchar(100),
     ordem varchar(100),
     FOREIGN KEY (CPFRf) REFERENCES recepcionistas(CPFR),
     FOREIGN KEY (RGSUSPf) REFERENCES pacientes(RGSUSP)    
@@ -42,16 +41,16 @@
     nomeE varchar(100),
     datanascE date,
     idadeE int, 
-    telefoneE int, 
+    telefoneE BIGINT, 
     sexoE varchar(10), 
     corenE varchar(10),
     senha varchar(255)
     );
     
     create table triagens(
-    codAtenT varchar(20) primary key,  
+    codAtenT int AUTO_INCREMENT primary key,  
     CPFEf varchar(11),
-    codAtenf varchar(20),
+    codAtenf int,
     temAlergia varchar(3),
     alergiaAque varchar(250),
     temDiarréia varchar(3),

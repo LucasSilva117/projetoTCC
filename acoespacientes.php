@@ -58,13 +58,13 @@ if(isset($_POST['editar_paciente'])){
 
 
 
-    $sql = "UPDATE pacientes SET RGSUSP = '$RG', nomeP = '$nome', datanascP = '$datanasc', idadeP = '$idade', telefoneP = '$telefone', sexoP = '$sexo' enderecoP = '$endereco', munResP = '$munRes', UFP = '$UF'";
+    $sql = "UPDATE pacientes SET RGSUSP = '$RG', nomeP = '$nome', datanascP = '$datanasc', idadeP = '$idade', telefoneP = '$telefone', sexoP = '$sexo', enderecoP = '$endereco', munResP = '$munRes', UFP = '$UF' WHERE id = '$paciente_id'";
     mysqli_query($conn, $sql);
 
     if(mysqli_affected_rows($conn) > 0){
         echo "<script>alert('Edição realizada com sucesso!!'); location.href='lista_pacientes.php'; </script>";
     } else {
-        $erro = mysqli_errno($conn);
+        $erro = mysqli_error($conn);
 
         if ($erro == 1062) {
             // Erro de duplicidade
@@ -73,6 +73,59 @@ if(isset($_POST['editar_paciente'])){
             // Outro erro qualquer
             echo "Erro no banco: " . mysqli_error($conn);
         }
+    }
+} 
+
+
+// AÇÕES NO ATENDIMENTO
+
+if(isset($_POST['adicionar_atendimento'])){
+    session_start();
+    $RG = $_POST['RGSUSP'] ?? null;
+    $cpf = $_SESSION['CPFR'] ?? null; // CPF do recepcionista logado
+
+    if(!$RG || !$cpf){
+        echo "<script>alert('Dados insuficientes!'); history.back();</script>";
+        exit;
+    }
+
+    // Data e hora atuais
+    date_default_timezone_set('America/Sao_Paulo');
+    $dataHoje = date('Y-m-d');
+    $horaAgora = date('H:i');
+
+    // Verifica duplicidade: paciente já adicionado hoje?
+    $check = mysqli_query($conn, "SELECT * FROM atendimentos WHERE RGSUSPf = '$RG' AND dataA = '$dataHoje'");
+    if(mysqli_num_rows($check) > 0){
+        echo "<script>alert('Paciente já está na lista de atendimento hoje!'); history.back();</script>";
+        exit;
+    }
+
+    // Calcular ordem
+    $resOrdem = mysqli_query($conn, "SELECT COUNT(*) as total FROM atendimentos WHERE dataA = '$dataHoje'");
+    $row = mysqli_fetch_assoc($resOrdem);
+    $ordem = $row['total'] + 1;
+
+    // Inserir paciente
+    $sqlInsert = "INSERT INTO atendimentos (CPFRf, RGSUSPf, dataA, hora, ordem)
+                  VALUES ('$cpf', '$RG', '$dataHoje', '$horaAgora', '$ordem')";
+
+    if(mysqli_query($conn, $sqlInsert)){
+        echo "<script>alert('Paciente adicionado com sucesso!'); location.href='restrita_recepcao.php';</script>";
+    } else {
+        echo "<script>alert('Erro ao adicionar paciente: " . mysqli_error($conn) . "'); history.back();</script>";
+    }
+}   
+
+if(isset($_POST['excluir_atendimento'])){
+    $codAten = mysqli_real_escape_string($conn, $_POST['excluir_atendimento']);
+    $sql = "DELETE FROM atendimentos WHERE codAten = '$codAten'";
+    mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) > 0){
+        echo "<script>alert('Atendimento excluido com sucesso!!');location.href='restrita_recepcao.php';</script>";
+    } else {
+        echo "<script>alert('Não foi possivel excluir esse atendimento!!');location.href='restrita_recepcao.php';</script>";
     }
 } 
 ?>
