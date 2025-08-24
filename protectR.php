@@ -1,4 +1,5 @@
 <?php 
+//proteção das páginas da recepção
 if(!isset($_SESSION)){
     session_start();
 }

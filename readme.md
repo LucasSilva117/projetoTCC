@@ -1,5 +1,5 @@
 <h1 align="center">Projeto de TCC</h1>
-![Logo SEFAPS](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/Lucas/OneDrive%20-%20Etec%20Centro%20Paula%20Souza/Documents/TCC/imagens/sefaps.png?version%3D1755132855608)
+
 Curso Técnico em informática dos alunos da Turma 2 do 3° Info
 SEFAPS: Sistema Eletrônico de Fichas de Atendimento para Pronto Socorros
 

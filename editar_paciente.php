@@ -38,7 +38,7 @@ include('conexao.php');
                             $query = mysqli_query($conn, $sql);
 
                             if (mysqli_num_rows($query) > 0) {
-                                //erro aqui, nao ta chegando o sexoP
+                                
                                 $paciente = mysqli_fetch_array($query);
                                 
                                 $sexoP = $paciente['sexoP'];
@@ -71,7 +71,7 @@ include('conexao.php');
                                         <label>Sexo</label>
                                         <select name="sexoP" class="form-select" required>
                                             <option value="">Selecione...</option>
-                                            <option value="Masculino" <?= ($sexoP == "masculino") ? "selected" : "" ?>>Masculino</option>
+                                            <option value="Masculino" <?= ($sexoP == "Masculino") ? "selected" : "" ?>>Masculino</option>
                                             <option value="Feminino" <?= ($sexoP == "Feminino") ? "selected" : "" ?>>Feminino</option>
                                             <option value="Outro" <?= ($sexoP == "Outro") ? "selected" : "" ?>>Outro</option>
                                         </select>
