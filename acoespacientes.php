@@ -128,4 +128,8 @@ if(isset($_POST['excluir_atendimento'])){
         echo "<script>alert('Não foi possivel excluir esse atendimento!!');location.href='restrita_recepcao.php';</script>";
     }
 } 
+
+if (isset($_POST['atender_paciente'])){
+    
+}
 ?>

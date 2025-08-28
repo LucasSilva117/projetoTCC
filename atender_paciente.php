@@ -105,52 +105,138 @@ include('conexao.php');
 
                                 <!--Àrea do atendimento-->
                                 <!--O horario do atendimento é a hora que o paciente entrou, logo coloca um input pré-selecionado com o horário atual de quando a página-->
-                                <h4>Enfermagem</h4>
+                                <div class="container-sm">
+                                    <h4 class="mb-4">Enfermagem</h4>
+                                </div>
                                 <div>
-                                    <form action="acoespacientes.php" method="post" class="row g-3">
-                                        <div class="col-md-6">
-                                            <label>RG/SUS</label>
-                                            <input type="text" name="RGSUSP" class="form-control" placeholder="N° RG ou N° SUS" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Nome</label>
-                                            <input type="text" name="nomeP" class="form-control" placeholder="Nome completo" required>
+                                    <form action="acoespacientes.php" method="post" class="row g-3 border border-2 border-secondary">
+                                        <div class="col-md-1">
+                                            <label>Diarréia?</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="temDiarreia" value="Sim">
+                                                <label class="form-check-label">
+                                                    Sim
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="temDiarreia" value="Nao">
+                                                <label class="form-check-label">
+                                                    Não
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <label>Data de nascimento</label>
-                                            <input type="date" name="datanascP" class="form-control" required>
+                                            <label>Data de início dos sintomas</label>
+                                            <input type="date" name="tempoSintomas" class="form-control" placeholder="Nome completo" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Tem alergia?</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="temAlergia" value="Sim">
+                                                <label class="form-check-label">
+                                                    Sim
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="temAlergia" value="Nao">
+                                                <label class="form-check-label">
+                                                    Não
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Se sim, à que?</label>
+                                            <input type="text" name="alergiaAque" class="form-control">
                                         </div>
                                         <div class="col-md-2">
-                                            <label>Idade</label>
-                                            <input type="number" name="idadeP" class="form-control" required>
+                                            <label>Tosse a mais de 3 semanas?</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="tosseMais3sem" value="Sim">
+                                                <label class="form-check-label">
+                                                    Sim
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="tosseMais3sem" value="Nao">
+                                                <label class="form-check-label">
+                                                    Não
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Colheu BK?</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="colheuBK" value="Sim">
+                                                <label class="form-check-label">
+                                                    Sim
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="colheuBK" value="Nao">
+                                                <label class="form-check-label">
+                                                    Não
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>PA:</label>
+                                            <input type="text" name="pressaoArterial" class="form-control" placeholder="12x8" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Pulso:</label>
+                                            <input type="text" name="pulso" class="form-control" placeholder="b/m" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>F/R:</label>
+                                            <input type="text" name="frequenciaResp" class="form-control" placeholder="r/m" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Tax:</label>
+                                            <input type="text" name="temperatura" class="form-control" placeholder="°C" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Glicemia:</label>
+                                            <input type="text" name="glicemia" class="form-control" placeholder="mg/dl" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>SPO:</label>
+                                            <input type="text" name="SPO" class="form-control" placeholder="%" required>
                                         </div>
                                         <div class="col-md-4">
-                                            <label>Telefone</label>
-                                            <input type="text" name="telefoneP" class="form-control" placeholder="1399999999">
+                                            <label>Classificação de risco:</label> <br>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="">
+                                                <label class="form-check-label">Vermelho</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option2">
+                                                <label class="form-check-label" for="inlineRadio2">Amarelo</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="">
+                                                <label class="form-check-label">Verde</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option2">
+                                                <label class="form-check-label" for="inlineRadio2">Azul</label>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label>Sexo</label>
-                                            <select name="sexoP" class="form-select" required>
-                                                <option value="">Selecione...</option>
-                                                <option value="Masculino">Masculino</option>
-                                                <option value="Feminino">Feminino</option>
-                                                <option value="Outro">Outro</option>
-                                            </select>
+                                        <div class="col-md-2">
+                                            <label>Peso:</label>
+                                            <input type="text" name="peso" class="form-control" placeholder="100,5Kg" required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Hora do atendimento</label>
+                                            <input type="time" name="hora" class="form-control" id="hora" required>
                                         </div>
                                         <div class="col-md-12">
-                                            <label>Endereço</label>
-                                            <input type="text" name="enderecoP" class="form-control" placeholder="Rua, Bairro, complemento, N°" required>
+                                            <label>Situação / Queixa / Histórico (medicações usuais)</label> <br>
+                                            <textarea name="observacao" rows="10" cols="150" class="form-control"></textarea>
                                         </div>
-                                        <div class="col-md-8">
-                                            <label>Município de residência</label>
-                                            <input type="text" name="munResP" class="form-control" placeholder="Iguape" required>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label>UF</label>
-                                            <input type="text" name="UFP" class="form-control" placeholder="SP, RJ, PR..." required>
-                                        </div>
+
+
                                         <div class="mb-3">
-                                            <button type="submit" name="cadastrar_paciente" class="btn btn-primary">Salvar</button>
+                                            <button type="submit" name="atender_paciente" class="btn btn-primary">Salvar</button>
                                         </div>
 
 
@@ -170,7 +256,14 @@ include('conexao.php');
     </div>
 
 
-
+    <script>
+        window.addEventListener("load", function() {
+            let agora = new Date();
+            let horas = String(agora.getHours()).padStart(2, '0');
+            let minutos = String(agora.getMinutes()).padStart(2, '0');
+            document.getElementById("hora").value = `${horas}:${minutos}`;
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 
