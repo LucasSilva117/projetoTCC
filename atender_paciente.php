@@ -27,20 +27,28 @@ include('conexao.php');
                 <div class="card">
                     <div class="card-header">
                         <h4>Atender paciente
-                            <a href="javascript:history.back()" class="btn btn-danger float-end">Voltar</a>
+                            <button class="btn btn-danger float-end" onclick="if(confirm('Tem certeza que quer voltar? Os dados serão perdidos?')) { history.go(-1); }"> 
+                                Voltar
+                            </button>
                         </h4>
                     </div>
                     <div class="card-body">
                         <?php
-                        if (isset($_GET['rg'])) {
-                            $paciente_id = mysqli_real_escape_string($conn, $_GET['rg']);
+                        if (isset($_GET['aten_id'])) {
+                            $atendimento_id = mysqli_real_escape_string($conn, $_GET['aten_id']);
+                            
+                            //mudando o status do atendimento:
+                            $sql_update = "UPDATE atendimentos SET situacao = 'em_atendimento' WHERE codAten = '$atendimento_id'";
+                            mysqli_query($conn, $sql_update);
+
+
                             $sql = "SELECT a.*, p.* FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP";
                             $query = mysqli_query($conn, $sql);
 
                             if (mysqli_num_rows($query) > 0) {
 
                                 $paciente = mysqli_fetch_array($query);
-
+                                $codAten = $paciente['codAten'];
                                 $sexoP = $paciente['sexoP'];
 
 
@@ -104,22 +112,23 @@ include('conexao.php');
                                 </form>
 
                                 <!--Àrea do atendimento-->
-                                <!--O horario do atendimento é a hora que o paciente entrou, logo coloca um input pré-selecionado com o horário atual de quando a página-->
+                                <!--O horario do atendimento é a hora que o paciente entrou-->
                                 <div class="container-sm">
                                     <h4 class="mb-4">Enfermagem</h4>
                                 </div>
                                 <div>
                                     <form action="acoespacientes.php" method="post" class="row g-3 border border-2 border-secondary">
+                                        <input type="hidden" name="codAten" value="<?= $codAten ?>">
                                         <div class="col-md-1">
                                             <label>Diarréia?</label>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="temDiarreia" value="Sim">
+                                                <input class="form-check-input" type="radio" name="temDiarreia" value="Sim" required>
                                                 <label class="form-check-label">
                                                     Sim
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="temDiarreia" value="Nao">
+                                                <input class="form-check-input" type="radio" name="temDiarreia" value="Nao" required>
                                                 <label class="form-check-label">
                                                     Não
                                                 </label>
@@ -132,13 +141,13 @@ include('conexao.php');
                                         <div class="col-md-1">
                                             <label>Tem alergia?</label>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="temAlergia" value="Sim">
+                                                <input class="form-check-input" type="radio" name="temAlergia" value="Sim" required>
                                                 <label class="form-check-label">
                                                     Sim
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="temAlergia" value="Nao">
+                                                <input class="form-check-input" type="radio" name="temAlergia" value="Nao" required>
                                                 <label class="form-check-label">
                                                     Não
                                                 </label>
@@ -151,13 +160,13 @@ include('conexao.php');
                                         <div class="col-md-2">
                                             <label>Tosse a mais de 3 semanas?</label>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="tosseMais3sem" value="Sim">
+                                                <input class="form-check-input" type="radio" name="tosseMais3sem" value="Sim" required>
                                                 <label class="form-check-label">
                                                     Sim
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="tosseMais3sem" value="Nao">
+                                                <input class="form-check-input" type="radio" name="tosseMais3sem" value="Nao" required>
                                                 <label class="form-check-label">
                                                     Não
                                                 </label>
@@ -166,13 +175,13 @@ include('conexao.php');
                                         <div class="col-md-2">
                                             <label>Colheu BK?</label>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="colheuBK" value="Sim">
+                                                <input class="form-check-input" type="radio" name="colheuBK" value="Sim" required>
                                                 <label class="form-check-label">
                                                     Sim
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="colheuBK" value="Nao">
+                                                <input class="form-check-input" type="radio" name="colheuBK" value="Nao" required>
                                                 <label class="form-check-label">
                                                     Não
                                                 </label>
@@ -192,7 +201,7 @@ include('conexao.php');
                                         </div>
                                         <div class="col-md-1">
                                             <label>Tax:</label>
-                                            <input type="text" name="temperatura" class="form-control" placeholder="°C" required>
+                                            <input type="text" name="temperatura" class="form-control" placeholder="35,0°C" required>
                                         </div>
                                         <div class="col-md-1">
                                             <label>Glicemia:</label>
@@ -205,19 +214,19 @@ include('conexao.php');
                                         <div class="col-md-4">
                                             <label>Classificação de risco:</label> <br>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="">
+                                                <input class="form-check-input" type="radio" name="clascRisco" value="vermelho" required>
                                                 <label class="form-check-label">Vermelho</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option2">
+                                                <input class="form-check-input" type="radio" name="clascRisco" value="amarelo" required>
                                                 <label class="form-check-label" for="inlineRadio2">Amarelo</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="">
+                                                <input class="form-check-input" type="radio" name="clascRisco" value="verde" required>
                                                 <label class="form-check-label">Verde</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option2">
+                                                <input class="form-check-input" type="radio" name="clascRisco" value="azul" required>
                                                 <label class="form-check-label" for="inlineRadio2">Azul</label>
                                             </div>
                                         </div>

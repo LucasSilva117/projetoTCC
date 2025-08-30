@@ -32,6 +32,7 @@
     dataA date,
     hora time, 
     ordem varchar(100),
+    situacao varchar(20), /* "Esperando, Em atendimento, Finalizado" */
     FOREIGN KEY (CPFRf) REFERENCES recepcionistas(CPFR),
     FOREIGN KEY (RGSUSPf) REFERENCES pacientes(RGSUSP)    
     ); 
@@ -60,7 +61,7 @@
     pressaoArterial varchar(5),
     pulso varchar(3),
     frequenciaResp varchar(3),
-    temperatura varchar(3),
+    temperatura varchar(4),
     glicemia varchar(3),
     SPO varchar(3),
     clascRisco varchar(8), 

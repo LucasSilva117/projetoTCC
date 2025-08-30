@@ -45,17 +45,22 @@ include('conexao.php');
                   <th>Sexo</th>
                   <th>Hora do Atendimento</th>
                   <th>Ação</th>
+                  <th>Situação</th>
                 </tr>
               </thead>
               <tbody>
                 <?php
-                $sql = 'SELECT a.*, p.nomeP, p.idadeP, p.sexoP FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP ORDER BY a.ordem ASC';
+
+                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
                 $atendimentos = mysqli_query($conn, $sql);
+
+                if (!$atendimentos) {
+                  die("Erro na consulta: " . mysqli_error($conn));
+                }
 
                 if (mysqli_num_rows($atendimentos) > 0) {
                   foreach ($atendimentos as $atendimento) {
                 ?>
-
                     <tr>
                       <td><?= $atendimento['ordem'] ?></td>
                       <td><?= $atendimento['RGSUSPf'] ?></td>
@@ -65,10 +70,21 @@ include('conexao.php');
                       <td><?= $atendimento['hora'] ?></td>
                       <td>
                         <form action="acoespacientes.php" method="post" class="d-inline">
-                          <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_atendimento" value="<?= $atendimento['codAten'] ?>" class="btn btn-danger btn-sm">
+                          <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')"
+                            type="submit"
+                            name="excluir_atendimento"
+                            value="<?= $atendimento['codAten'] ?>"
+                            class="btn btn-danger btn-sm">
                             Excluir
                           </button>
                         </form>
+                      </td>
+                      <td>
+                        <?php if ($atendimento['situacao'] === 'esperando'): ?>
+                          <span class="badge bg-secondary"><i class="bi bi-hourglass-split"></i> Em espera</span>
+                        <?php elseif ($atendimento['situacao'] === 'em_atendimento'): ?>
+                          <span class="badge bg-danger"><i class="bi bi-exclamation-triangle-fill"></i> Em atendimento</span>
+                        <?php endif; ?>
                       </td>
                     </tr>
                 <?php
@@ -77,6 +93,7 @@ include('conexao.php');
                   echo '<h5>Nenhum paciente na lista</h5>';
                 }
                 ?>
+
               </tbody>
 
             </table>
