@@ -1,6 +1,37 @@
 <?php
 include('protectR.php');
 include('conexao.php');
+
+// Recebendo filtros (se existirem)
+$rg = $_GET['rg'] ?? '';
+$idade = $_GET['idade'] ?? '';
+$sexo = $_GET['sexo'] ?? '';
+
+// Montando a query base
+$sql = "SELECT *
+        FROM pacientes
+        WHERE 1=1";
+
+// Se o filtro foi preenchido, adiciona condição
+if (!empty($_GET['rg'])) {
+    $rg = mysqli_real_escape_string($conn, $_GET['rg']);
+    $sql .= " AND RGSUSP = '$rg'";
+}
+
+if (!empty($_GET['idade'])) {
+    $idade = mysqli_real_escape_string($conn, $_GET['idade']);
+    $sql .= " AND idadeP = '$idade'";
+}
+
+if (!empty($_GET['sexo'])) {
+    $idade = mysqli_real_escape_string($conn, $_GET['sexo']);
+    $sql .= " AND sexoP = '$sexo'";
+}
+
+// Ordenar por mais recente
+$sql .= " ORDER BY id DESC";
+
+$query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +40,7 @@ include('conexao.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restrita recepcionista</title>
+    <title>Restrita recepção</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
 </head>
@@ -31,6 +62,29 @@ include('conexao.php');
                             <a href="restrita_recepcao.php" class="btn btn-danger float-end">Voltar</a>
                         </h4>
                     </div>
+                    <form method="get" class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label>RG:</label>
+                            <input type="text" name="rg" class="form-control" value="<?= htmlspecialchars($rg) ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <label>Idade</label>
+                            <input type="number" name="idade" class="form-control" value="<?= htmlspecialchars($idade) ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <label>Sexo:</label>
+                            <select name="sexo" class="form-control">
+                                <option value="">-- Todos --</option>
+                                <option value="Masculino" <?= $sexo == 'Masculino' ? 'selected' : '' ?>>Masculino</option>
+                                <option value="Feminino" <?= $sexo == 'Feminino' ? 'selected' : '' ?>>Feminino</option>
+                                <option value="Outro" <?= $sexo == 'Outro' ? 'selected' : '' ?>>Outro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <a href="lista_pacientes.php" class="btn btn-secondary ms-2">Limpar</a>
+                        </div>
+                    </form>
                     <div class="card-body">
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -46,30 +100,30 @@ include('conexao.php');
 
                             <tbody>
                                 <?php 
-                                $sql = 'SELECT * FROM pacientes ORDER BY id DESC';
-                                $pacientes = mysqli_query($conn, $sql);
-                                
-                                if(mysqli_num_rows($pacientes) > 0){
-                                    foreach($pacientes as $paciente) {
-                                ?>
+                                if (mysqli_num_rows($query) > 0) {
+
+                                    $totalAtendimentos = mysqli_num_rows($query);
+
+                                    echo "<p>Total de registros: $totalAtendimentos</p>";
+                                    while ($row = mysqli_fetch_assoc($query)): ?>
 
                                 <tr>
-                                    <td><?=$paciente['RGSUSP']?></td>
-                                    <td><?=$paciente['nomeP']?></td>
-                                    <td><?=$paciente['idadeP']?></td>
-                                    <td><?=date('d/m/Y', strtotime($paciente['datanascP']))?></td>
-                                    <td><?=$paciente['sexoP']?></td>
+                                    <td><?=$row['RGSUSP']?></td>
+                                    <td><?=$row['nomeP']?></td>
+                                    <td><?=$row['idadeP']?></td>
+                                    <td><?=date('d/m/Y', strtotime($row['datanascP']))?></td>
+                                    <td><?=$row['sexoP']?></td>
                                     <td>
-                                        <a href="ver_paciente.php?id=<?=$paciente['id']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
+                                        <a href="ver_paciente.php?id=<?=$row['id']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
                                         <form action="acoespacientes.php" method="post" class="d-inline">
-                                            <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_paciente" value="<?=$paciente['id']?>" class="btn btn-danger btn-sm">
+                                            <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_paciente" value="<?=$row['id']?>" class="btn btn-danger btn-sm">
                                                 Excluir
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
+                                <?php endwhile; ?>
                                 <?php 
-                                    }
                                 } else{
                                     echo '<h5>Nenhum paciente registrado</h5>';
                                 }

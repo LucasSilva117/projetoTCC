@@ -118,7 +118,7 @@ include('conexao.php');
                                 </div>
                                 <div>
                                     <form action="acoespacientes.php" method="post" class="row g-3 border border-2 border-secondary">
-                                        <input type="hidden" name="codAten" value="<?= $codAten ?>">
+                                        <input type="hidden" name="codAten" value="<?= $atendimento_id ?>">
                                         <div class="col-md-1">
                                             <label>Diarréia?</label>
                                             <div class="form-check">
@@ -236,7 +236,7 @@ include('conexao.php');
                                         </div>
                                         <div class="col-md-2">
                                             <label>Hora do atendimento</label>
-                                            <input type="time" name="hora" class="form-control" id="hora" required>
+                                            <input type="time" name="horaT" class="form-control" id="hora" required>
                                         </div>
                                         <div class="col-md-12">
                                             <label>Situação / Queixa / Histórico (medicações usuais)</label> <br>

@@ -30,7 +30,7 @@
     CPFRf varchar(11),
     RGSUSPf varchar(15),
     dataA date,
-    hora time, 
+    horaA time, 
     ordem varchar(100),
     situacao varchar(20), /* "Esperando, Em atendimento, Finalizado" */
     FOREIGN KEY (CPFRf) REFERENCES recepcionistas(CPFR),
@@ -66,7 +66,7 @@
     SPO varchar(3),
     clascRisco varchar(8), 
     peso float, 
-    hora time,
+    horaT time,
     observacao varchar(255), 
     FOREIGN KEY (CPFEf) REFERENCES enfermeiros(CPFE),
     FOREIGN KEY ( codAtenf) REFERENCES atendimentos(codAten)    

@@ -107,7 +107,7 @@ if (isset($_POST['adicionar_atendimento'])) {
     $ordem = $row['total'] + 1;
 
     // Inserir paciente
-    $sqlInsert = "INSERT INTO atendimentos (CPFRf, RGSUSPf, dataA, hora, ordem, situacao)
+    $sqlInsert = "INSERT INTO atendimentos (CPFRf, RGSUSPf, dataA, horaA, ordem, situacao)
                   VALUES ('$cpf', '$RG', '$dataHoje', '$horaAgora', '$ordem', 'esperando')";
 
     if (mysqli_query($conn, $sqlInsert)) {
@@ -128,6 +128,8 @@ if (isset($_POST['excluir_atendimento'])) {
         echo "<script>alert('Não foi possivel excluir esse atendimento!!');location.href='restrita_recepcao.php';</script>";
     }
 }
+
+// AÇÕES NO ATENDIMENTO (TRIAGEM)
 
 if (isset($_POST['atender_paciente'])) {
     session_start();
@@ -151,12 +153,12 @@ if (isset($_POST['atender_paciente'])) {
     $SPO = $_POST['SPO'] ?? null;
     $clascRisco = $_POST['clascRisco'] ?? null;
     $peso = $_POST['peso'] ?? null;
-    $hora = $_POST['hora'] ?? null;
+    $horaT = $_POST['horaT'] ?? null;
     $observacao = $_POST['observacao'] ?? null;
 
 
-    $sql = "INSERT INTO triagens(CPFEf, codAtenf, temDiarreia, tempoSintomas, temAlergia, alergiaAque, tosseMais3sem, colheuBK, pressaoArterial, pulso, frequenciaResp, temperatura, glicemia, SPO, clascRisco, peso, hora, observacao) VALUES 
-    ('$cpf','$codAten','$temDiarreia','$tempoSintomas','$temAlergia','$alergiaAque','$tosseMais3sem','$colheuBK','$pressaoArterial','$pulso','$frequenciaResp','$temperatura','$glicemia','$SPO','$clascRisco','$peso','$hora','$observacao')";
+    $sql = "INSERT INTO triagens(CPFEf, codAtenf, temDiarreia, tempoSintomas, temAlergia, alergiaAque, tosseMais3sem, colheuBK, pressaoArterial, pulso, frequenciaResp, temperatura, glicemia, SPO, clascRisco, peso, horaT, observacao) VALUES 
+    ('$cpf','$codAten','$temDiarreia','$tempoSintomas','$temAlergia','$alergiaAque','$tosseMais3sem','$colheuBK','$pressaoArterial','$pulso','$frequenciaResp','$temperatura','$glicemia','$SPO','$clascRisco','$peso','$horaT','$observacao')";
     mysqli_query($conn, $sql);
 
     if (mysqli_affected_rows($conn) > 0) {
@@ -166,4 +168,27 @@ if (isset($_POST['atender_paciente'])) {
     }
 
     //quando o paciente terminar de ser atendido, mudar o status da tabela atendimento para "finalizado"
+}
+
+if (isset($_POST['excluir_atendimentoT'])) {
+    $codAtenT = mysqli_real_escape_string($conn, $_POST['excluir_atendimentoT']);
+
+    // Buscar o codAten referente à triagem
+    $res = mysqli_query($conn, "SELECT codAtenf FROM triagens WHERE codAtenT = '$codAtenT'");
+    if ($res && mysqli_num_rows($res) > 0) {
+        $row = mysqli_fetch_assoc($res);
+        $codAten = $row['codAtenf'];
+
+        // Excluir da triagem
+        mysqli_query($conn, "DELETE FROM triagens WHERE codAtenT = '$codAtenT'");
+
+        // Excluir do atendimento
+        mysqli_query($conn, "DELETE FROM atendimentos WHERE codAten = '$codAten'");
+    }
+
+    if (mysqli_affected_rows($conn) > 0) {
+        echo "<script>alert('Atendimento excluido com sucesso!!');location.href='hist_atendimentos.php';</script>";
+    } else {
+        echo "<script>alert('Não foi possivel excluir esse atendimento!!');location.href='hist_atendimentos.php';</script>";
+    }
 }

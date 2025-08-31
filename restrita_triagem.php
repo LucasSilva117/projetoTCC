@@ -24,7 +24,7 @@ include('conexao.php');
 
   <div class="container-lg">
     <div class="mx-2 my-1">
-      <a href="" class="btn btn-primary">Registros de atendimentos</a>
+      <a href="hist_atendimentos.php" class="btn btn-primary">Histórico de atendimentos</a>
     </div>
     <div class="row">
       <div class="col-md-12">
