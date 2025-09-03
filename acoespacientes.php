@@ -119,6 +119,20 @@ if (isset($_POST['adicionar_atendimento'])) {
 
 if (isset($_POST['excluir_atendimento'])) {
     $codAten = mysqli_real_escape_string($conn, $_POST['excluir_atendimento']);
+
+    // verifica a situação antes
+    $sql_check = "SELECT situacao FROM atendimentos WHERE codAten = '$codAten'";
+    $result_check = mysqli_query($conn, $sql_check);
+    $atendimento = mysqli_fetch_assoc($result_check);
+
+    if ($atendimento && $atendimento['situacao'] === 'em_atendimento') {
+        // bloqueia a exclusão
+        echo "<script>alert('Não é possível excluir um atendimento que está em atendimento!');location.href='restrita_recepcao.php';</script>";
+        exit;
+    }
+
+    //exclusão 
+    $codAten = mysqli_real_escape_string($conn, $_POST['excluir_atendimento']);
     $sql = "DELETE FROM atendimentos WHERE codAten = '$codAten'";
     mysqli_query($conn, $sql);
 
@@ -192,3 +206,19 @@ if (isset($_POST['excluir_atendimentoT'])) {
         echo "<script>alert('Não foi possivel excluir esse atendimento!!');location.href='hist_atendimentos.php';</script>";
     }
 }
+
+if (isset($_POST['voltar_atendimento'])) {
+    $codAten = mysqli_real_escape_string($conn, $_POST['codAten']);
+
+    // Atualiza a situação para "esperando"
+    $sql = "UPDATE atendimentos SET situacao = 'esperando' WHERE codAten = '$codAten'";
+    mysqli_query($conn, $sql);
+
+    if (mysqli_affected_rows($conn) > 0) {
+        echo "<script>alert('Atendimento voltou para a fila!'); location.href='restrita_triagem.php';</script>";
+    } else {
+        echo "<script>alert('Erro ao voltar atendimento!'); location.href='restrita_triagem.php';</script>";
+    }
+    exit;
+}
+

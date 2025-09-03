@@ -4,7 +4,7 @@ include('conexao.php');
 
 // Recebendo filtros (se existirem)
 $rg = $_GET['rg'] ?? '';
-$idade = $_GET['idade'] ?? '';
+$nome = $_GET['nome'] ?? '';
 $sexo = $_GET['sexo'] ?? '';
 
 // Montando a query base
@@ -15,12 +15,12 @@ $sql = "SELECT *
 // Se o filtro foi preenchido, adiciona condição
 if (!empty($_GET['rg'])) {
     $rg = mysqli_real_escape_string($conn, $_GET['rg']);
-    $sql .= " AND RGSUSP = '$rg'";
+    $sql .= " AND RGSUSP LIKE '$rg%'";
 }
 
-if (!empty($_GET['idade'])) {
-    $idade = mysqli_real_escape_string($conn, $_GET['idade']);
-    $sql .= " AND idadeP = '$idade'";
+if (!empty($_GET['nome'])) {
+    $nome = mysqli_real_escape_string($conn, $_GET['nome']);
+    $sql .= " AND nomeP LIKE '$nome%'";
 }
 
 if (!empty($_GET['sexo'])) {
@@ -68,8 +68,8 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                             <input type="text" name="rg" class="form-control" value="<?= htmlspecialchars($rg) ?>">
                         </div>
                         <div class="col-md-3">
-                            <label>Idade</label>
-                            <input type="number" name="idade" class="form-control" value="<?= htmlspecialchars($idade) ?>">
+                            <label>Nome</label>
+                            <input type="text" name="nome" class="form-control" value="<?= htmlspecialchars($nome) ?>">
                         </div>
                         <div class="col-md-3">
                             <label>Sexo:</label>

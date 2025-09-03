@@ -19,7 +19,7 @@ $sql = "SELECT a.*,
 // Se o filtro foi preenchido, adiciona condição
 if (!empty($_GET['rg'])) {
     $rg = mysqli_real_escape_string($conn, $_GET['rg']);
-    $sql .= " AND p.RGSUSP = '$rg'";
+    $sql .= " AND p.RGSUSP LIKE '$rg%'";
 }
 
 if (!empty($_GET['data'])) {

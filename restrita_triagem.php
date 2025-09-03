@@ -65,7 +65,7 @@ include('conexao.php');
                       <td><?= $atendimento['nomeP'] ?></td>
                       <td><?= $atendimento['idadeP'] ?></td>
                       <td><?= $atendimento['sexoP'] ?></td>
-                      <td><?= $atendimento['hora'] ?></td>
+                      <td><?= $atendimento['horaA'] ?></td>
                       <td>
                         <form action="acoespacientes.php" method="post" class="d-inline">
                           <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_atendimento" value="<?= $atendimento['codAten'] ?>" class="btn btn-danger btn-sm">
