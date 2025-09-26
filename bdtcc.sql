@@ -71,3 +71,9 @@
     FOREIGN KEY (CPFEf) REFERENCES enfermeiros(CPFE),
     FOREIGN KEY ( codAtenf) REFERENCES atendimentos(codAten)    
     );    
+
+    create table administradores(
+    CPFA varchar(11) primary key,
+    nomeA varchar(100),
+    senha varchar(255)
+    );

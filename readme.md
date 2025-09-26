@@ -19,6 +19,8 @@ Cada um com suas funções e permissões de alterações do banco de dados
     Ao atender, muda o status do "atendimento", assim saindo da lista de espera;
     Todos os atendimentos já concluidos será armazenado no banco de dados.
 
-    Esses sistema é uma variação de um sistema CRUD, em resumo
+    Administrador:
+    Gerencia os cadastros de funcionários;
+    Tem acesso à estatíticas da unidade(Sobre pacientes e atendimentos);
 
     OBS: Se esse sistema der certo, tentarei fazer uma outra conexão com o médico que vai atender os pacientes, enviando os resultados da consulta na triagem.

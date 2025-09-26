@@ -94,6 +94,29 @@ if ($funcao == "logar") {
         echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
         }
     }
+    else if($tipo=='administrador'){
+        $cpf = $_POST['cpf'];
+        $senha = $_POST['senha'];
+        $query = mysqli_query($conn, "SELECT * FROM administradores WHERE CPFA='$cpf' AND senha='$senha'");
+        $numReg = mysqli_num_rows($query);
+
+        if ($numReg == 1) {
+        $administrador = $query->fetch_assoc();
+
+        if(!isset($_SESSION)){
+            session_start();
+        };
+        $_SESSION['CPFA']= $administrador['CPFA'];
+        $_SESSION['nomeA']= $administrador['nomeA'];
+ 
+ 
+            header("Location: restrita_admin.php");
+            //echo "<script>alert('Admin logado com sucesso!!');location.href='restrita_admin.php';</script>";
+        }
+        else {
+        echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
+        }
+    }
         
     
 }

@@ -232,7 +232,7 @@
             <option value="">Selecione a sua função</option>
             <option value="recepcionista">Recepcionista</option>
             <option value="enfermeiro">Enfermeiro(a)</option>
-            <option value="Administrador">Administrador</option>
+            <option value="administrador">Administrador</option>
           </select>
         </div>
         <button type="submit">Entrar</button>

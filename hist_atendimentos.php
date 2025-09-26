@@ -121,7 +121,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                             <td><?= $row['horaT'] ?></td>
                                             <td><?= $row['clascRisco'] ?></td>
                                             <th>
-                                                <a href="ver_paciente.php?id=<?= $paciente['id'] ?>" class="btn btn-success btn-sm">Visualizar e editar</a>
+                                                <a href="ver_atendimento.php?id=<?= $row['codAtenT'] ?>" class="btn btn-success btn-sm">Visualizar</a>
                                                 <form action="acoespacientes.php" method="post" class="d-inline">
                                                     <button onclick="return confirm('Tem certeza que deseja excluir esse registro?')" type="submit" name="excluir_atendimentoT" value="<?= $row['codAtenT'] ?>" class="btn btn-danger btn-sm">
                                                         Excluir
