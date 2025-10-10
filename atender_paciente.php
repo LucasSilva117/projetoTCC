@@ -197,7 +197,7 @@ include('conexao.php');
                                     </div>
                                     <div class="col-md-1">
                                         <label>PA:</label>
-                                        <input type="text" name="pressaoArterial" class="form-control" placeholder="12x8" required>
+                                        <input type="text" name="pressaoArterial" class="form-control" placeholder="120x80" required>
                                     </div>
                                     <div class="col-md-1">
                                         <label>Pulso:</label>

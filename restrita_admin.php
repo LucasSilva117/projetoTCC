@@ -17,13 +17,14 @@ include('conexao.php');
 <body>
   <nav class="navbar navbar-dark bg-dark">
     <div class="container-md">
-      <h1 style="color: white;">Admin</h1>
+      <h1 style="color: white;">Administração</h1>
       <p><a href="logout.php">Sair da conta</a></p>
     </div>
   </nav>
 
   <div class="container-lg">
     <div class="mx-2 my-1">
+      <a href="lista_funcionarios.php" class="btn btn-dark">Gerenciamento de funcionários</a>
       <a href="hist_atendimentos.php" class="btn btn-primary">Histórico de atendimentos</a>
       <a href="lista_pacientes.php" class="btn btn-info">Lista de pacientes cadastrados</a>
     </div>

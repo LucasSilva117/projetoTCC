@@ -58,7 +58,7 @@
     alergiaAque varchar(250),
     tosseMais3sem varchar(3),
     colheuBK varchar(3),
-    pressaoArterial varchar(5),
+    pressaoArterial varchar(7),
     pulso varchar(3),
     frequenciaResp varchar(3),
     temperatura varchar(4),
@@ -71,6 +71,17 @@
     FOREIGN KEY (CPFEf) REFERENCES enfermeiros(CPFE),
     FOREIGN KEY ( codAtenf) REFERENCES atendimentos(codAten)    
     );    
+
+    create table medicos(
+    CPFM varchar(11) primary key,
+    nomeM varchar(100),
+    datanascM date,
+    idadeM int, 
+    telefoneM BIGINT, 
+    sexoM varchar(10), 
+    CRM varchar(9),
+    senha varchar(255)
+    );
 
     create table administradores(
     CPFA varchar(11) primary key,

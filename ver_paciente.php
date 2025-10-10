@@ -27,7 +27,7 @@ include('conexao.php');
                 <div class="card">
                     <div class="card-header">
                         <h4>Dados do paciente
-                            <a href="lista_pacientes.php" class="btn btn-danger float-end">Voltar</a>
+                            <button onclick="history.back()" class="btn btn-danger float-end">Voltar</button>
                         </h4>
                     </div>
                     <div class="card-body">

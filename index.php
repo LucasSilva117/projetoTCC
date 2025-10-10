@@ -232,6 +232,7 @@
             <option value="">Selecione a sua função</option>
             <option value="recepcionista">Recepcionista</option>
             <option value="enfermeiro">Enfermeiro(a)</option>
+            <option value="medico">Médico</option>
             <option value="administrador">Administrador</option>
           </select>
         </div>

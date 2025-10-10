@@ -64,7 +64,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                 <div class="card">
                     <div class="card-header">
                         <h4>Atendimentos registrados
-                            <a href="restrita_triagem.php" class="btn btn-danger float-end">Voltar</a>
+                            <button onclick="history.back()" class="btn btn-danger float-end">Voltar</button>
                         </h4>
                     </div>
                     <form method="get" class="row g-3 mb-4">

@@ -4,8 +4,8 @@ $funcao = "";
 $funcao = $_GET["funcao"];
 $tipo=$_POST["tipo"];
 
-//funções de cadstrar, alterar e excluir usuarios. OBS: não utilizar por enquanto
-/*if ($funcao == "cadastrar") {
+
+if ($funcao == "cadastrar") {
     $cpf = $_POST['cpf'];
     $nome = $_POST['nome'];
     $senha = $_POST['senha'];
@@ -13,13 +13,13 @@ $tipo=$_POST["tipo"];
     $insere = mysqli_query($conn, "INSERT INTO funcionarios(NOME,cpf,SENHA) VALUES ('$nome','$cpf','$senha')");
 
     if ($insere) {
-        echo "<script>alert('Cadastro realizado com sucesso!!'); location.href='cadfuncionarios.php'; </script>";
+        echo "<script>alert('Cadastro realizado com sucesso!!'); location.href='cad_funcionarios.php'; </script>";
     } else {
         echo "<script>alert('Não foi possível inserir os dados!!');history.back(-1);</script>";
     }
 }
 
-if ($funcao == "alterar") {
+if ($funcao == "editar") {
     $cpf = $_POST['cpf'];
     $nome = $_POST['nome'];
     $senha = $_POST['senha'];
@@ -45,7 +45,7 @@ if ($funcao == "excluir") {
         echo "<script>alert('Não foi possível excluir os dados!!');history.back(-1);</script>";
     }
 }
-*/
+
 if ($funcao == "logar") {
     
      
@@ -115,6 +115,29 @@ if ($funcao == "logar") {
         }
         else {
         echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
+        }
+    }
+    else if($tipo=='medico'){
+        $cpf = $_POST['cpf'];
+        $senha = $_POST['senha'];
+        $query = mysqli_query($conn, "SELECT * FROM medicos WHERE CPFM='$cpf' AND senha='$senha'");
+        $numReg = mysqli_num_rows($query);
+
+        if ($numReg == 1) {
+        $medico = $query->fetch_assoc();
+
+        if(!isset($_SESSION)){
+            session_start();
+        };
+        $_SESSION['CPFA']= $medico['CPFM'];
+        $_SESSION['nomeA']= $medico['nomeM'];
+ 
+ 
+            
+        echo "<script>alert('Médico logado com sucesso!!');location.href='restrita_medico.php';</script>";
+        }
+        else {
+        echo "<script>alert('funcionario e senha não existem!!');location.href='index.php';</script>";
         }
     }
         

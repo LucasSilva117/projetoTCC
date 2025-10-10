@@ -31,7 +31,7 @@ include('conexao.php');
                             <?php if (isset($_GET['id'])) {
                                 $atendimento_id = mysqli_real_escape_string($conn, $_GET['id']);
                             ?>
-                                <a href="hist_atendimentos.php" class="btn btn-danger float-end">Voltar</a>
+                                <button onclick="history.back()" class="btn btn-danger float-end">Voltar</button>
                         </h4>
                     </div>
                     <div class="card-body">
