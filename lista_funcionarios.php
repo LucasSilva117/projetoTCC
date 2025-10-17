@@ -107,7 +107,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                             <a href="lista_funcionarios.php" class="btn btn-secondary ms-2">Limpar</a>
                         </div>
                         <div class="col-md-4">
-                            <a href="cad_funcionarios.php" class="btn btn-success">Cadastrar novo funcionário</a>
+                            <a href="cad_funcionario.php" class="btn btn-success">Cadastrar novo funcionário</a>
                         </div>
                     </form>
                     <div class="card-body">
@@ -139,7 +139,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                     <td><?=$row['sexo']?></td>
                                     <td><?=$row['funcao']?></td>
                                     <td>
-                                        <a href="ver_funcionario.php?id=<?=$row['cpf']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
+                                        <a href="ver_funcionario.php?cpf=<?=$row['cpf']?>&funcao=<?=$row['funcao']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
                                         <form action="funcionarios.php" method="post" class="d-inline">
                                             <button onclick="return confirm('Tem certeza que deseja excluir esse funcionário?')" type="submit" name="excluir_paciente" value="<?=$row['cpf']?>" class="btn btn-danger btn-sm">
                                                 Excluir

@@ -80,6 +80,7 @@
     telefoneM BIGINT, 
     sexoM varchar(10), 
     CRM varchar(9),
+    especialidade varchar(255),
     senha varchar(255)
     );
 
