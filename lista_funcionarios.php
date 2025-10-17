@@ -10,11 +10,11 @@ $funcao = $_GET['funcao'] ?? '';
 
 // Montando a query base unificada com UNION ALL
 $sql = "
-    SELECT nomeE AS nome, CPFE AS cpf, sexoE AS sexo, 'Enfermeiro' AS funcao, idadeE AS idade, datanascE AS datanasc FROM enfermeiros
+    SELECT nomeE AS nome, CPFE AS cpf, sexoE AS sexo, 'enfermeiro' AS funcao, idadeE AS idade, datanascE AS datanasc FROM enfermeiros
     UNION ALL
-    SELECT nomeM AS nome, CPFM AS cpf, sexoM AS sexo, 'Médico' AS funcao, idadeM AS idade, datanascM AS datanasc FROM medicos
+    SELECT nomeM AS nome, CPFM AS cpf, sexoM AS sexo, 'medico' AS funcao, idadeM AS idade, datanascM AS datanasc FROM medicos
     UNION ALL
-    SELECT nomeR AS nome, CPFR AS cpf, sexoR AS sexo, 'Recepcionista' AS funcao, idadeR AS idade, datanascR AS datanasc FROM recepcionistas
+    SELECT nomeR AS nome, CPFR AS cpf, sexoR AS sexo, 'recepcionista' AS funcao, idadeR AS idade, datanascR AS datanasc FROM recepcionistas
 ";
 
 // Agora criamos o filtro geral
@@ -72,7 +72,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                 <div class="card">
                     <div class="card-header">
                         <h4>Funcionários registrados
-                            <button onclick="history.back()" class="btn btn-danger float-end">Voltar</button>
+                            <a href="restrita_admin.php" class="btn btn-danger float-end">Voltar</a>
                         </h4>
                     </div>
                     <form method="get" class="row g-3 mb-4">
@@ -97,9 +97,9 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                             <label>Função:</label>
                             <select name="funcao" class="form-control">
                                 <option value="">-- Todos --</option>
-                                <option value="Enfermeiro" <?= $funcao == 'Enfermeiro' ? 'selected' : '' ?>>Enfermeiro</option>
-                                <option value="Médico" <?= $funcao == 'Médico' ? 'selected' : '' ?>>Médico</option>
-                                <option value="Recepcionista" <?= $funcao == 'Recepcionista' ? 'selected' : '' ?>>Recepcionista</option>
+                                <option value="enfermeiro" <?= $funcao == 'enfermeiro' ? 'selected' : '' ?>>Enfermeiro</option>
+                                <option value="medico" <?= $funcao == 'medico' ? 'selected' : '' ?>>Médico</option>
+                                <option value="recepcionista" <?= $funcao == 'recepcionista' ? 'selected' : '' ?>>Recepcionista</option>
                             </select>
                         </div>
                         <div class="col-md-3 d-flex align-items-end">
@@ -137,11 +137,21 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                     <td><?=$row['nome']?></td>
                                     <td><?=$row['idade']?></td>
                                     <td><?=$row['sexo']?></td>
-                                    <td><?=$row['funcao']?></td>
+                                    <td><?php 
+                                    if($row['funcao']  == 'enfermeiro'){
+                                        echo "Enfermeiro";
+                                    }elseif($row['funcao'] == 'medico'){
+                                        echo "Médico";
+                                    }elseif($row['funcao'] == 'recepcionista'){
+                                        echo "Recepcionista";
+                                    };
+                                    ?>
                                     <td>
                                         <a href="ver_funcionario.php?cpf=<?=$row['cpf']?>&funcao=<?=$row['funcao']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
-                                        <form action="funcionarios.php" method="post" class="d-inline">
-                                            <button onclick="return confirm('Tem certeza que deseja excluir esse funcionário?')" type="submit" name="excluir_paciente" value="<?=$row['cpf']?>" class="btn btn-danger btn-sm">
+                                        <form action="funcionarios.php?acao=excluir" method="post" class="d-inline">
+                                            <input type="hidden" name="cpf" value="<?=$row['cpf']?>">
+                                            <input type="hidden" name="funcao" value="<?=$row['funcao']?>">
+                                            <button onclick="return confirm('Tem certeza que deseja excluir esse funcionário?')" type="submit" class="btn btn-danger btn-sm">
                                                 Excluir
                                             </button>
                                         </form>

@@ -11,15 +11,18 @@ $cpf = mysqli_real_escape_string($conn, $_GET['cpf']);
 $funcao = mysqli_real_escape_string($conn, $_GET['funcao']);
 
 switch ($funcao) {
-    case 'Médico':
+    case 'medico':
+        $sufixo = 'M';
         $sql = "SELECT * FROM medicos WHERE CPFM = '$cpf'";
         break;
 
-    case 'Enfermeiro':
+    case 'enfermeiro':
+        $sufixo = 'E';
         $sql = "SELECT * FROM enfermeiros WHERE CPFE = '$cpf'";
         break;
 
-    case 'Recepcionista':
+    case 'recepcionista':
+        $sufixo = 'R';
         $sql = "SELECT * FROM recepcionistas WHERE CPFR = '$cpf'";
         break;
 
@@ -78,35 +81,35 @@ $funcionario = mysqli_fetch_assoc($result);
                             <div class="col-md-6">
                                 <label>Nome</label>
                                 <p class="form-control">
-                                    <?= htmlspecialchars($funcionario['nome' . substr($funcao, 0, 1)]) ?>
+                                    <?= htmlspecialchars($funcionario['nome' . $sufixo]) ?>
                                 </p>
                             </div>
                             <div class="col-md-2">
                                 <label>Data de nascimento</label>
                                 <p class="form-control">
-                                    <?= date('d/m/Y', strtotime($funcionario['datanasc' . substr($funcao, 0, 1)])) ?>
+                                    <?= date('d/m/Y', strtotime($funcionario['datanasc' . $sufixo])) ?>
                                 </p>
                             </div>
                             <div class="col-md-2">
                                 <label>Idade</label>
                                 <p class="form-control">
-                                    <?= htmlspecialchars($funcionario['idade' . substr($funcao, 0, 1)]) ?>
+                                    <?= htmlspecialchars($funcionario['idade' . $sufixo]) ?>
                                 </p>
                             </div>
                             <div class="col-md-4">
                                 <label>Telefone</label>
                                 <p class="form-control">
-                                    <?= !empty($funcionario['telefone' . substr($funcao, 0, 1)]) ? htmlspecialchars($funcionario['telefone' . substr($funcao, 0, 1)]) : '<span class="text-danger">Telefone não cadastrado</span>'; ?>
+                                    <?= !empty($funcionario['telefone' . $sufixo]) ? htmlspecialchars($funcionario['telefone' . $sufixo]) : '<span class="text-danger">Telefone não cadastrado</span>'; ?>
                                 </p>
                             </div>
                             <div class="col-md-4">
                                 <label>Sexo</label>
                                 <p class="form-control">
-                                    <?= htmlspecialchars($funcionario['sexo' . substr($funcao, 0, 1)]) ?>
+                                    <?= htmlspecialchars($funcionario['sexo' . $sufixo]) ?>
                                 </p>
                             </div>
 
-                            <?php if ($funcao === 'Médico'): ?>
+                            <?php if ($funcao === 'medico'): ?>
                             <div class="col-md-4">
                                 <label>CRM</label>
                                 <p class="form-control"><?= htmlspecialchars($funcionario['CRM']) ?></p>
@@ -115,7 +118,7 @@ $funcionario = mysqli_fetch_assoc($result);
                                 <label>Especialidade</label>
                                 <p class="form-control"><?= htmlspecialchars($funcionario['especialidade']) ?></p>
                             </div>
-                            <?php elseif ($funcao === 'Enfermeiro'): ?>
+                            <?php elseif ($funcao === 'enfermeiro'): ?>
                             <div class="col-md-4">
                                 <label>Coren</label>
                                 <p class="form-control"><?= htmlspecialchars($funcionario['corenE']) ?></p>

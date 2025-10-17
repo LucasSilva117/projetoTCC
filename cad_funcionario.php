@@ -32,13 +32,13 @@ include('conexao.php');
                         </h4>
                     </div>
                     <div class="card-body">
-                        <form action="funcionarios.php?funcao=cadastrar" method="post" id="formCadastro" class="row g-3">
+                        <form action="funcionarios.php?acao=cadastrar" method="post" id="formCadastro" class="row g-3">
                             
                             <h3>Cadastrar Funcionário</h3>
                             <div class="row justify-content-start">
                                 <div class="col-md-4">
                                     <label>Função do funcionário:</label>
-                                    <select name="tipo" id="tipo" class="form-select" required
+                                    <select name="funcao" id="funcao" class="form-select" required
                                         onchange="mostrarCampos()">
                                         <option value="">Selecione...</option>
                                         <option value="enfermeiro">Enfermeiro</option>
@@ -58,7 +58,7 @@ include('conexao.php');
                             </div>
                             <div class="col-md-4">
                                 <label>Telefone:</label>
-                                <input type="text" name="teleofne" class="form-control" required>
+                                <input type="text" name="telefone" class="form-control" required>
                             </div>
                             <div class="col-md-3">
                                 <label>Data de Nascimento:</label>
@@ -81,7 +81,7 @@ include('conexao.php');
                                 <label>Senha:</label>
                                 <input type="password" name="senha" class="form-control" required>
                             </div>
-                            <!-- Campos específicos por tipo -->
+                            <!-- Campos específicos por funcao -->
                             <div id="camposEspecificos"></div>
 
                             <div class="mb-3">
@@ -91,19 +91,19 @@ include('conexao.php');
 
                         <script>
                             function mostrarCampos() {
-                                const tipo = document.getElementById('tipo').value;
+                                const funcao = document.getElementById('funcao').value;
                                 const camposDiv = document.getElementById('camposEspecificos');
 
                                 camposDiv.innerHTML = ''; // limpa campos anteriores
 
-                                if (tipo === 'enfermeiro') {
+                                if (funcao === 'enfermeiro') {
                                     camposDiv.innerHTML = `
                                 <div class="col-md-4" m-3>
                                     <label>Coren:</label>
                                     <input type="text" name="coren" class="form-control" required>
                                 </div>
                                 `;
-                                } else if (tipo === 'medico') {
+                                } else if (funcao === 'medico') {
                                     camposDiv.innerHTML = `
                                 <div class="col-md-4">
                                     <label>CRM:</label>
@@ -114,7 +114,7 @@ include('conexao.php');
                                     <input type="text" name="especialidade" class="form-control" required>
                                 </div>
                                  `;
-                                } else if (tipo === 'recepcionista') {
+                                } else if (funcao === 'recepcionista') {
                                     camposDiv.innerHTML = `
                                 `;
                                 }

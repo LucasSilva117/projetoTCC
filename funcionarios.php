@@ -1,10 +1,15 @@
 <?php
 include('conexao.php');
-$funcao = $_GET["funcao"];
-$tipo = $_POST["tipo"];
+//funcao é o cargo da pessoa, enfermeiro, recepcionista
+//acao é o que vai ser executado, cadastrar, editar, excluir e logar
 
-if ($funcao == "cadastrar") {
-    if ($tipo == 'recepcionista') {
+$acao='';
+$acao = $_GET["acao"];
+$funcao = $_POST["funcao"];
+
+
+if ($acao == "cadastrar") {
+    if ($funcao == 'recepcionista') {
         $CPF = $_POST['CPF'] ?? null;
         $nome = $_POST['nome'] ?? null;;
         $datanasc = $_POST['datanasc'] ?? null;;
@@ -29,7 +34,7 @@ if ($funcao == "cadastrar") {
                 echo "Erro no banco: " . mysqli_error($conn);
             }
         }
-    } else if ($tipo == 'enfermeiro') {
+    } else if ($funcao == 'enfermeiro') {
         $CPF = $_POST['CPF'] ?? null;
         $nome = $_POST['nome'] ?? null;;
         $datanasc = $_POST['datanasc'] ?? null;;
@@ -55,7 +60,7 @@ if ($funcao == "cadastrar") {
                 echo "Erro no banco: " . mysqli_error($conn);
             }
         }
-    } else if ($tipo == 'medico') {
+    } else if ($funcao == 'medico') {
         $CPF = $_POST['CPF'] ?? null;
         $nome = $_POST['nome'] ?? null;;
         $datanasc = $_POST['datanasc'] ?? null;;
@@ -87,64 +92,44 @@ if ($funcao == "cadastrar") {
     }
 }
 
-if ($funcao == "editar") {
+if ($acao == "editar") {
+
     // Campos comuns
-    $cpf    = $_POST['cpf'];
-    $nome   = $_POST['nome'] ?? '';
-    $telefone = $_POST['telefone'] ?? '';
-    $sexo   = $_POST['sexo'] ?? '';
-    $idade  = $_POST['idade'] ?? null;
+    $cpf      = $_POST['cpf'];
+    $nome     = $_POST['nome'] ?? '';
+    $telefone = $_POST['telefone'] ?? null;
+    $sexo     = $_POST['sexo'] ?? '';
+    $idade    = $_POST['idade'] ?? null;
     $datanasc = $_POST['datanasc'] ?? null;
+    $funcao     = $_POST['funcao'] ?? '';
 
     // usa NULL para valores vazios
-    $telefone = $telefone === '' ? null : $telefone;
+    $telefone = $telefone == '' ? null : $telefone;
 
-    // Escolhe tabela/campos por função
-    if ($tipo === 'medico') {
+    if ($funcao == 'medico') {
         $crm = $_POST['crm'] ?? null;
         $especialidade = $_POST['especialidade'] ?? null;
 
-        $sql = "UPDATE medicos SET nomeM = ?, telefoneM = ?, sexoM = ?, idadeM = ?, datanascM = ?, CRM = ?, especialidade = ? WHERE CPFM = ?";
+        $sql = "UPDATE medicos 
+            SET nomeM = ?, telefoneM = ?, sexoM = ?, idadeM = ?, datanascM = ?, CRM = ?, especialidade = ?
+            WHERE CPFM = ?";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'sssiisss',
-            $nome,
-            $telefone,
-            $sexo,
-            $idade,
-            $datanasc,
-            $crm,
-            $especialidade,
-            $cpf
-        );
-    } elseif ($tipo === 'enfermeiro') {
+        mysqli_stmt_bind_param($stmt, "ssssssss", $nome, $telefone, $sexo, $idade, $datanasc, $crm, $especialidade, $cpf);
+    } elseif ($funcao == 'enfermeiro') {
         $coren = $_POST['coren'] ?? null;
 
-        $sql = "UPDATE enfermeiros SET nomeE = ?, telefoneE = ?, sexoE = ?, idadeE = ?, datanascE = ?, corenE = ? WHERE CPFE = ?";
+        $sql = "UPDATE enfermeiros 
+            SET nomeE = ?, telefoneE = ?, sexoE = ?, idadeE = ?, datanascE = ?, corenE = ?
+            WHERE CPFE = ?";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'sssiiss',
-            $nome,
-            $telefone,
-            $sexo,
-            $idade,
-            $datanasc,
-            $coren,
-            $cpf
-        );
-    } elseif ($tipo === 'recepcionista') {
-        $sql = "UPDATE recepcionistas SET nomeR = ?, telefoneR = ?, sexoR = ?, idadeR = ?, datanascR = ? WHERE CPFR = ?";
+        mysqli_stmt_bind_param($stmt, "sssssss", $nome, $telefone, $sexo, $idade, $datanasc, $coren, $cpf);
+    } elseif ($funcao == 'recepcionista') {
+        $sql = "UPDATE recepcionistas 
+            SET nomeR = ?, telefoneR = ?, sexoR = ?, idadeR = ?, datanascR = ?
+            WHERE CPFR = ?";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'sssiiss',
-            $nome,
-            $telefone,
-            $sexo,
-            $idade,
-            $datanasc,
-            $cpf
-        );
-    } else {
-        // função inválida
-        die('Função inválida.');
-    }
+        mysqli_stmt_bind_param($stmt, "ssssss", $nome, $telefone, $sexo, $idade, $datanasc, $cpf);
+    } 
 
     // Executa e verifica
     if (!$stmt) {
@@ -154,7 +139,7 @@ if ($funcao == "editar") {
     if ($ok) {
         mysqli_stmt_close($stmt);
         // Redireciona (ou exibe mensagem)
-        header("Location: ver_funcionario.php?cpf=" . urlencode($cpf) . "&funcao=" . urlencode($funcao));
+        echo "<script>alert('Dados modificados com sucesso!!');location.href='lista_funcionarios.php';</script>";
         exit;
     } else {
         $err = mysqli_error($conn);
@@ -163,22 +148,14 @@ if ($funcao == "editar") {
     }
 }
 
-if ($funcao == "excluir") {
-    $cpfexclui = $_GET['cpf'];
-
-    $exclui = mysqli_query($conn, "DELETE FROM funcionarios WHERE cpf='$cpfexclui'");
-
-    if ($exclui) {
-        echo "<script>alert('Exclusão realizada com sucesso!!');location.href='listatabela.php';</script>";
-    } else {
-        echo "<script>alert('Não foi possível excluir os dados!!');history.back(-1);</script>";
-    }
+if ($acao == "excluir") {
+    die("Aqui voce morre");
 }
 
-if ($funcao == "logar") {
+if ($acao == "logar") {
 
 
-    if ($tipo == 'recepcionista') {
+    if ($funcao == 'recepcionista') {
         $cpf = $_POST['cpf'];
         $senha = $_POST['senha'];
         $query = mysqli_query($conn, "SELECT * FROM recepcionistas WHERE CPFR='$cpf' AND senha='$senha'");
@@ -198,7 +175,7 @@ if ($funcao == "logar") {
         } else {
             echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
         }
-    } else if ($tipo == 'enfermeiro') {
+    } else if ($funcao == 'enfermeiro') {
         $cpf = $_POST['cpf'];
         $senha = $_POST['senha'];
         $query = mysqli_query($conn, "SELECT * FROM enfermeiros WHERE CPFE='$cpf' AND senha='$senha'");
@@ -219,7 +196,7 @@ if ($funcao == "logar") {
         } else {
             echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
         }
-    } else if ($tipo == 'administrador') {
+    } else if ($funcao == 'administrador') {
         $cpf = $_POST['cpf'];
         $senha = $_POST['senha'];
         $query = mysqli_query($conn, "SELECT * FROM administradores WHERE CPFA='$cpf' AND senha='$senha'");
@@ -240,7 +217,7 @@ if ($funcao == "logar") {
         } else {
             echo "<script>alert('funcionarios e senha não existem!!');location.href='index.php';</script>";
         }
-    } else if ($tipo == 'medico') {
+    } else if ($funcao == 'medico') {
         $cpf = $_POST['cpf'];
         $senha = $_POST['senha'];
         $query = mysqli_query($conn, "SELECT * FROM medicos WHERE CPFM='$cpf' AND senha='$senha'");

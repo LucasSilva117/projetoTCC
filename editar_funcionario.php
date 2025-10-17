@@ -12,56 +12,25 @@ $funcao = mysqli_real_escape_string($conn, $_GET['funcao']);
 
 // Define qual tabela buscar
 switch ($funcao) {
-    case 'Médico':
+    case 'medico':
         $tabela = 'medicos';
-        $prefixo = 'M';
+        $sufixo = 'M';
         $campo_cpf = 'CPFM';
         break;
-    case 'Enfermeiro':
+    case 'enfermeiro':
         $tabela = 'enfermeiros';
-        $prefixo = 'E';
+        $sufixo = 'E';
         $campo_cpf = 'CPFE';
         break;
-    case 'Recepcionista':
+    case 'recepcionista':
         $tabela = 'recepcionistas';
-        $prefixo = 'R';
+        $sufixo = 'R';
         $campo_cpf = 'CPFR';
         break;
     default:
         die("Função inválida.");
 }
 
-// Atualização (POST)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = mysqli_real_escape_string($conn, $_POST['nome']);
-    $telefone = mysqli_real_escape_string($conn, $_POST['telefone']);
-    $sexo = mysqli_real_escape_string($conn, $_POST['sexo']);
-    $idade = mysqli_real_escape_string($conn, $_POST['idade']);
-
-    // Campos extras conforme a função
-    $extra = '';
-    if ($funcao === 'Médico') {
-        $crm = mysqli_real_escape_string($conn, $_POST['crm']);
-        $especialidade = mysqli_real_escape_string($conn, $_POST['especialidade']);
-        $extra = ", CRM='$crm', especialidade='$especialidade'";
-    } elseif ($funcao === 'Enfermeiro') {
-        $coren = mysqli_real_escape_string($conn, $_POST['coren']);
-        $extra = ", corenE='$coren'";
-    }
-
-    $sql_update = "
-        UPDATE $tabela
-        SET nome$prefixo='$nome', telefone$prefixo='$telefone', sexo$prefixo='$sexo', idade$prefixo='$idade' $extra
-        WHERE $campo_cpf='$cpf'
-    ";
-
-    if (mysqli_query($conn, $sql_update)) {
-        echo "<script>alert('Dados atualizados com sucesso!');location.href='ver_funcionario.php?cpf=$cpf&funcao=$funcao';</script>";
-        exit;
-    } else {
-        echo "<script>alert('Erro ao atualizar: " . mysqli_error($conn) . "');</script>";
-    }
-}
 
 // Consulta para preencher os campos
 $sql = "SELECT * FROM $tabela WHERE $campo_cpf = '$cpf'";
@@ -85,7 +54,7 @@ $funcionario = mysqli_fetch_assoc($result);
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-md">
             <h1 class="text-white">Editar <?= htmlspecialchars($funcao) ?></h1>
-            <p><a href="logout.php" class="text-white">Sair</a></p>
+            <p><a href="logout.php">Sair</a></p>
         </div>
     </nav>
 
@@ -97,7 +66,7 @@ $funcionario = mysqli_fetch_assoc($result);
                 </h4>
             </div>
             <div class="card-body">
-                <form method="post" action="funcionarios.php?funcao=editar">
+                <form method="post" action="funcionarios.php?acao=editar">
                     <input type="hidden" name="cpf" value="<?= htmlspecialchars($cpf) ?>">
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -108,43 +77,43 @@ $funcionario = mysqli_fetch_assoc($result);
                         <div class="col-md-6">
                             <label>Nome</label>
                             <input type="text" name="nome" class="form-control"
-                                value="<?= htmlspecialchars($funcionario['nome' . $prefixo]) ?>" required>
+                                value="<?= htmlspecialchars($funcionario['nome' . $sufixo]) ?>" required>
                         </div>
 
                         <div class="col-md-4">
                             <label>Data de Nascimento</label>
                             <input type="date" name="datanasc" class="form-control"
-                                value="<?= htmlspecialchars($funcionario['datanasc' . $prefixo] ?? '') ?>">
+                                value="<?= htmlspecialchars($funcionario['datanasc' . $sufixo] ?? '') ?>">
                         </div>
 
                         <div class="col-md-4">
                             <label>Idade</label>
                             <input type="number" name="idade" class="form-control"
-                                value="<?= htmlspecialchars($funcionario['idade' . $prefixo]) ?>">
+                                value="<?= htmlspecialchars($funcionario['idade' . $sufixo]) ?>">
                         </div>
 
                         <div class="col-md-2">
                             <label>Telefone</label>
                             <input type="text" name="telefone" class="form-control"
-                                value="<?= htmlspecialchars($funcionario['telefone' . $prefixo] ?? '') ?>">
+                                value=<?= htmlspecialchars($funcionario['telefone' . $sufixo]) ?>>
                         </div>
 
                         <div class="col-md-2">
                             <label>Sexo</label>
                             <select name="sexo" class="form-control">
                                 <option value="Masculino"
-                                    <?= $funcionario['sexo' . $prefixo] === 'Masculino' ? 'selected' : '' ?>>Masculino
+                                    <?= $funcionario['sexo' . $sufixo] === 'Masculino' ? 'selected' : '' ?>>Masculino
                                 </option>
                                 <option value="Feminino"
-                                    <?= $funcionario['sexo' . $prefixo] === 'Feminino' ? 'selected' : '' ?>>Feminino
+                                    <?= $funcionario['sexo' . $sufixo] === 'Feminino' ? 'selected' : '' ?>>Feminino
                                 </option>
                                 <option value="Outro"
-                                    <?= $funcionario['sexo' . $prefixo] === 'Outro' ? 'selected' : '' ?>>Outro</option>
+                                    <?= $funcionario['sexo' . $sufixo] === 'Outro' ? 'selected' : '' ?>>Outro</option>
                             </select>
                         </div>
 
-                        <?php if ($funcao === 'Médico'): ?>
-                        <input type="hidden" name="tipo" value="medico">
+                        <?php if ($funcao === 'medico'): ?>
+                        <input type="hidden" name="funcao" value="medico">
                         <div class="col-md-4">
                             <label>CRM</label>
                             <input type="text" name="crm" class="form-control"
@@ -155,15 +124,15 @@ $funcionario = mysqli_fetch_assoc($result);
                             <input type="text" name="especialidade" class="form-control"
                                 value="<?= htmlspecialchars($funcionario['especialidade']) ?>">
                         </div>
-                        <?php elseif ($funcao === 'Enfermeiro'): ?>
-                        <input type="hidden" name="tipo" value="enfermeiro">
+                        <?php elseif ($funcao === 'enfermeiro'): ?>
+                        <input type="hidden" name="funcao" value="enfermeiro">
                         <div class="col-md-4">
                             <label>Coren</label>
                             <input type="text" name="coren" class="form-control"
                                 value="<?= htmlspecialchars($funcionario['corenE']) ?>">
                         </div>
-                        <?php elseif ($funcao === 'Recepcionista'): ?>
-                        <input type="hidden" name="tipo" value="recepcionista">
+                        <?php elseif ($funcao === 'recepcionista'): ?>
+                        <input type="hidden" name="funcao" value="recepcionista">
 
                         <?php endif; ?>
                         <div class="row">

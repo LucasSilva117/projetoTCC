@@ -131,13 +131,13 @@
       margin-bottom: 1px;
     }
 
-    input, #tipo {
+    input, #funcao {
       padding: 8px;
       border: 1px solid #aaa;
       border-radius: 7px;
     }
 
-    #tipo {
+    #funcao {
       font-size: 14px;
       color: #333;
     }
@@ -218,7 +218,7 @@
     <h2 id="bemvindo">Acesse sua conta!</h2>
     <p>Bem vindo, por favor efetue seu login.</p>
     <div class="formulario">
-      <form action="funcionarios.php?funcao=logar" method="POST">
+      <form action="funcionarios.php?acao=logar" method="POST">
         <div class="inputs">
           <label for="cpf">CPF</label>
           <input type="text" name="cpf" placeholder="Digite seu login" required id="cpf">
@@ -228,7 +228,7 @@
            
 
           <label for="funcao">Função: </label>
-          <select name="tipo" id="tipo">
+          <select name="funcao" id="funcao" class="form-control">
             <option value="">Selecione a sua função</option>
             <option value="recepcionista">Recepcionista</option>
             <option value="enfermeiro">Enfermeiro(a)</option>
