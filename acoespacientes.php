@@ -71,7 +71,7 @@ if (isset($_POST['editar_paciente'])) {
             echo "<script>alert('Erro: Já existe um paciente com esse RG/SUS!'); history.back();</script>";
         } else {
             // Outro erro qualquer
-            echo "Erro no banco: " . mysqli_error($conn);
+            echo "Erro no banco: " . $erro;
         }
     }
 }
@@ -150,7 +150,7 @@ if (isset($_POST['atender_paciente'])) {
     $cpf = $_SESSION['CPFE'] ?? null; // CPF do enfermeiro logado
     $codAten = $_POST['codAten'] ?? null; // codAten enviado pelo hidden no formulario
 
-    $sql_update = "UPDATE atendimentos SET situacao = 'finalizado' WHERE codAten = '$codAten'";
+    $sql_update = "UPDATE atendimentos SET situacao = 'finalizado', WHERE codAten = '$codAten'";
     mysqli_query($conn, $sql_update); //atualizando a situacao em atendimentos
 
     $temDiarreia = $_POST['temDiarreia'] ?? null;

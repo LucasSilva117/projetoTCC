@@ -16,14 +16,23 @@ Assim criando um novo atendimento no banco de dados(Enfermeiro na triagem verá 
 
 <h3>Enfermeiro:</h3>
 Atender pacientes que estão na lista de espera para a triagem por meio de um formulário;
-Ao atender, muda o status do "atendimento", assim saindo da lista de espera;
-Todos os atendimentos já concluidos será armazenado no banco de dados.
+Ao atender, muda o status do "atendimento", assim saindo da lista de espera e indo para a lista de espera do médico
 
 <h3>Médico:</h3>
 Atender os pacientes que passaram pela recepção e triagem.
 Prencher um formulário com as seguintes informações: Horário do atendimento do médico, Exame Clínico e conduta inicial.
-Com os dados, será feito uma impressão do formulário completo e assim dando continuidade ao procedimento.
+Com os dados, será feito uma impressão do formulário completo e assim dando continuidade ao procedimento;
+Todos os atendimentos já concluidos seram armazenado no banco de dados
 
 <h3>Administrador:</h3>
 Gerencia os cadastros de funcionários;
-Tem acesso à estatíticas da unidade(Sobre pacientes, atendimentos e funcionários);
+Tem acesso à estatíticas da unidade(Sobre pacientes, atendimentos e funcionários)
+
+<h3>Mudanças previstas:</h3>
+Em pacientes, colocar o CPF como chave primária e RG e SUS como campos opicionais;
+Fazer a funcionalidade do médico e fazer dar certo a impressão;
+Ao modificar os dados, colocar uma notificação com os dados modificados;
+Pesquisar sobre o uso do CID(Classificação Internacional de Doença);
+Criptografia hash em todas as senhas ✅;
+Não poder mudar a hora do atendimento no formulário ✅;
+No status do atendimento mostrar quem está atendendo✅

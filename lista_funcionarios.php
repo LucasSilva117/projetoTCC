@@ -62,7 +62,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-md">
             <h1 style="color: white;">Gerenciamento de funcionários</h1>
-            <p><a href="logout.php">Sair da conta</a></p>
+            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
         </div>
     </nav>
 

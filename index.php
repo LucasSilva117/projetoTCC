@@ -216,7 +216,7 @@
 
   <div class="box">
     <h2 id="bemvindo">Acesse sua conta!</h2>
-    <p>Bem vindo, por favor efetue seu login.</p>
+    <p>Bem vindo, por favor efetue seu login. </p>
     <div class="formulario">
       <form action="funcionarios.php?acao=logar" method="POST">
         <div class="inputs">

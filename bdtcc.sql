@@ -28,12 +28,14 @@
     create TABLE atendimentos(
     codAten int AUTO_INCREMENT PRIMARY KEY,
     CPFRf varchar(11),
+    CPFEf varchar(11),
     RGSUSPf varchar(15),
     dataA date,
     horaA time, 
     ordem varchar(100),
     situacao varchar(20), /* "Esperando, Em atendimento, Finalizado" */
     FOREIGN KEY (CPFRf) REFERENCES recepcionistas(CPFR),
+    FOREIGN KEY (CPFEf) REFERENCES enfermeiros(CPFE),
     FOREIGN KEY (RGSUSPf) REFERENCES pacientes(RGSUSP)    
     ); 
     

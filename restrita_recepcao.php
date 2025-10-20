@@ -18,7 +18,7 @@ include('conexao.php');
   <nav class="navbar navbar-dark bg-dark">
     <div class="container-md">
       <h1 style="color: white;">Recepção</h1>
-      <p><a href="logout.php">Sair da conta</a></p>
+      <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
     </div>
   </nav>
 
@@ -51,7 +51,7 @@ include('conexao.php');
               <tbody>
                 <?php
 
-                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
+                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP, e.nomeE FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP LEFT JOIN enfermeiros e ON a.CPFEf = e.CPFE WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
                 $atendimentos = mysqli_query($conn, $sql);
 
                 if (!$atendimentos) {
@@ -82,8 +82,10 @@ include('conexao.php');
                       <td>
                         <?php if ($atendimento['situacao'] === 'esperando'): ?>
                           <span class="badge bg-secondary"><i class="bi bi-hourglass-split"></i> Em espera</span>
-                        <?php elseif ($atendimento['situacao'] === 'em_atendimento'): ?>
-                          <span class="badge bg-danger"><i class="bi bi-exclamation-triangle-fill"></i> Em atendimento</span>
+                        <?php elseif ($atendimento['situacao'] === 'em_atendimento'): 
+                          $primeiroNome = explode(' ', trim($atendimento['nomeE']))[0];
+                          ?>
+                          <span class="badge bg-danger"><i class="bi bi-exclamation-triangle-fill"></i> Em atendimento(<?=htmlspecialchars($primeiroNome)?>)</span>
                         <?php endif; ?>
                       </td>
                     </tr>

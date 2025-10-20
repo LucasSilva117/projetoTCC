@@ -18,7 +18,7 @@ include('conexao.php');
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-md">
             <h1 style="color: white;">Atendimento</h1>
-            <p><a href="logout.php">Sair</a></p>
+            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair</a></p>
         </div>
     </nav>
     <div class="container-md">
@@ -31,7 +31,7 @@ include('conexao.php');
                                 $atendimento_id = mysqli_real_escape_string($conn, $_GET['aten_id']);
                             ?>
                                 <form action="acoespacientes.php" method="post" onsubmit="return confirm('Tem certeza que quer voltar? Os dados serão perdidos!');">
-                                    <input type="hidden" name="codAten" value="<?= $atendimento_id?>">
+                                    <input type="hidden" name="codAten" value="<?= $atendimento_id ?>">
                                     <button type="submit" name="voltar_atendimento" class="btn btn-danger float-end">
                                         Voltar
                                     </button>
@@ -40,13 +40,18 @@ include('conexao.php');
                     </div>
                     <div class="card-body">
                         <?php
+                                // Pegando CPF do enfermeiro que clicou em atender
+                                if (!isset($_SESSION)) {
+                                    session_start();
+                                }
+                                $cpf_enfermeiro = $_SESSION['CPFE'];
                                 // Só muda para "em_atendimento" se ainda estiver "esperando"
-                                $sql_check = "SELECT situacao FROM atendimentos WHERE codAten = '$atendimento_id'";
+                                $sql_check = "SELECT * FROM atendimentos WHERE codAten = '$atendimento_id'";
                                 $result_check = mysqli_query($conn, $sql_check);
                                 $row = mysqli_fetch_assoc($result_check);
 
                                 if ($row && $row['situacao'] == 'esperando') {
-                                    $sql_update = "UPDATE atendimentos SET situacao = 'em_atendimento' WHERE codAten = '$atendimento_id'";
+                                    $sql_update = "UPDATE atendimentos SET situacao = 'em_atendimento', CPFEf = '$cpf_enfermeiro' WHERE codAten = '$atendimento_id'";
                                     mysqli_query($conn, $sql_update);
                                 }
 
@@ -243,8 +248,8 @@ include('conexao.php');
                                         <input type="text" name="peso" class="form-control" placeholder="100,5Kg" required>
                                     </div>
                                     <div class="col-md-2">
-                                        <label>Hora do atendimento</label>
-                                        <input type="time" name="horaT" class="form-control" id="hora" required>
+                                        <label>Hora de início do atendimento</label>
+                                        <input type="time" name="horaT" class="form-control" id="hora" readonly>
                                     </div>
                                     <div class="col-md-12">
                                         <label>Situação / Queixa / Histórico (medicações usuais)</label> <br>
