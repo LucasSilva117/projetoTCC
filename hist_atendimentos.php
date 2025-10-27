@@ -5,21 +5,21 @@ include('conexao.php');
 // Recebendo filtros (se existirem)
 $data = $_GET['data'] ?? '';
 $classificacao = $_GET['classificacao'] ?? '';
-$rg = $_GET['rg'] ?? '';
+$cpf = $_GET['cpf'] ?? '';
 
 // Montando a query base
 $sql = "SELECT a.*, 
                p.*, 
                t.* 
         FROM atendimentos a
-        JOIN pacientes p ON a.RGSUSPf = p.RGSUSP
+        JOIN pacientes p ON a.CPFPf = p.CPFP
         LEFT JOIN triagens t ON t.codAtenf = a.codAten
         WHERE 1=1";
 
 // Se o filtro foi preenchido, adiciona condição
-if (!empty($_GET['rg'])) {
-    $rg = mysqli_real_escape_string($conn, $_GET['rg']);
-    $sql .= " AND p.RGSUSP LIKE '$rg%'";
+if (!empty($_GET['cpf'])) {
+    $cpf = mysqli_real_escape_string($conn, $_GET['cpf']);
+    $sql .= " AND p.CPFP LIKE '$cpf%'";
 }
 
 if (!empty($_GET['data'])) {
@@ -83,8 +83,8 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label>RG:</label>
-                            <input type="text" name="rg" class="form-control" value="<?= htmlspecialchars($rg) ?>">
+                            <label>CPF:</label>
+                            <input type="text" name="cpf" class="form-control" value="<?= htmlspecialchars($cpf) ?>">
                         </div>
                         <div class="col-md-3 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary">Filtrar</button>
@@ -97,7 +97,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                 <tr>
                                     <th>Código</th>
                                     <th>Nome</th>
-                                    <th>RG</th>
+                                    <th>CPF</th>
                                     <th>Data</th>
                                     <th>Hora R</th>
                                     <th>Hora T</th>
@@ -115,7 +115,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                         <tr>
                                             <td><?= $row['codAten'] ?></td>
                                             <td><?= $row['nomeP'] ?></td>
-                                            <td><?= $row['RGSUSP'] ?></td>
+                                            <td><?= $row['CPFP'] ?></td>
                                             <td><?= date('d/m/Y', strtotime($row['dataA'])) ?></td>
                                             <td><?= $row['horaA'] ?></td>
                                             <td><?= $row['horaT'] ?></td>

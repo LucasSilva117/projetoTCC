@@ -1,14 +1,14 @@
 <?php
 include('conexao.php');
 
-$rg = mysqli_real_escape_string($conn, trim($_GET['rg'] ?? ''));
+$cpf = mysqli_real_escape_string($conn, trim($_GET['cpf'] ?? ''));
 
-if($rg === ''){
+if($cpf === ''){
     echo json_encode([]);
     exit;
 }
 
-$sql = "SELECT RGSUSP, nomeP FROM pacientes WHERE RGSUSP LIKE '$rg%'";
+$sql = "SELECT CPFP, nomeP FROM pacientes WHERE CPFP LIKE '$cpf%'";
 $result = mysqli_query($conn, $sql);
 
 $pacientes = [];

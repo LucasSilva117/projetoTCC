@@ -1,9 +1,12 @@
-    CREATE DATABASE bdtcc;
-    use bdtcc;
+
+    CREATE DATABASE BDsefaps;
+    use BDsefaps;
 
     create TABLE pacientes(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    RGSUSP varchar(15) NOT NULL UNIQUE,
+    codP INT AUTO_INCREMENT PRIMARY KEY,
+    CPFP varchar(11) NOT NULL UNIQUE,
+    RGP varchar(15) UNIQUE,
+    CNSP varchar(15) UNIQUE,
     nomeP varchar(100),
     datanascP date,
     idadeP int, 
@@ -24,21 +27,6 @@
     senha varchar(255)
     ); 
     
-    
-    create TABLE atendimentos(
-    codAten int AUTO_INCREMENT PRIMARY KEY,
-    CPFRf varchar(11),
-    CPFEf varchar(11),
-    RGSUSPf varchar(15),
-    dataA date,
-    horaA time, 
-    ordem varchar(100),
-    situacao varchar(20), /* "Esperando, Em atendimento, Finalizado" */
-    FOREIGN KEY (CPFRf) REFERENCES recepcionistas(CPFR),
-    FOREIGN KEY (CPFEf) REFERENCES enfermeiros(CPFE),
-    FOREIGN KEY (RGSUSPf) REFERENCES pacientes(RGSUSP)    
-    ); 
-    
     create TABLE enfermeiros(
     CPFE varchar(11) primary key,
     nomeE varchar(100),
@@ -49,6 +37,20 @@
     corenE varchar(10),
     senha varchar(255)
     );
+    create TABLE atendimentos(
+    codAten int AUTO_INCREMENT PRIMARY KEY,
+    CPFRf varchar(11) NOT NULL,
+    CPFEf varchar(11) ,
+    CPFPf varchar(11) NOT NULL,
+    dataA date,
+    horaA time, 
+    ordem varchar(100),
+    situacao varchar(20), /* "Esperando, Na triagem, Esperando consulta, Na consulta e Finalizado" */
+    FOREIGN KEY (CPFRf) REFERENCES recepcionistas(CPFR), /*CPFEf não é foreign key por enquanto*/
+    FOREIGN KEY (CPFPf) REFERENCES pacientes(CPFP)    
+    ); 
+    
+
     
     create table triagens(
     codAtenT int AUTO_INCREMENT primary key,  
@@ -84,6 +86,19 @@
     CRM varchar(9),
     especialidade varchar(255),
     senha varchar(255)
+    );
+
+    create table consultas(
+    codCons int AUTO_INCREMENT PRIMARY KEY,  
+    CPFMf varchar(11),
+    codAtenTf int,
+    codAtenf int,
+    horaC time, 
+    exameClinico varchar(255),
+    conduta varchar(255),
+    FOREIGN KEY (CPFMf) REFERENCES medicos(CPFM),
+    FOREIGN KEY ( codAtenTf) REFERENCES triagens(codAtenT),
+    FOREIGN KEY ( codAtenf) REFERENCES atendimentos(codAten)
     );
 
     create table administradores(

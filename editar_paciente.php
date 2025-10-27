@@ -32,36 +32,44 @@ include('conexao.php');
                     </div>
                     <div class="card-body">
                         <?php
-                        if (isset($_GET['id'])) {
-                            $paciente_id = mysqli_real_escape_string($conn, $_GET['id']);
-                            $sql = "SELECT * FROM pacientes WHERE id='$paciente_id'";
+                        if (isset($_GET['codP'])) {
+                            $paciente_id = mysqli_real_escape_string($conn, $_GET['codP']);
+                            $sql = "SELECT * FROM pacientes WHERE codP='$paciente_id'";
                             $query = mysqli_query($conn, $sql);
 
                             if (mysqli_num_rows($query) > 0) {
-                                
+
                                 $paciente = mysqli_fetch_array($query);
-                                
+
                                 $sexoP = $paciente['sexoP'];
 
 
                         ?>
                                 <form action="acoespacientes.php" method="post" class="row g-3">
-                                    <input type="hidden" name="id" value="<?=$paciente['id'];?>">
+                                    <input type="hidden" name="codP" value="<?= $paciente['codP']; ?>">
                                     <div class="col-md-6">
-                                        <label>RG/SUS</label>
-                                        <input type="text" name="RGSUSP" value="<?=$paciente['RGSUSP'];?>" class="form-control" placeholder="N° RG ou N° SUS" required>
+                                        <label>CPF</label>
+                                        <input type="text" name="CPFP" value="<?= $paciente['CPFP']; ?>" class="form-control" placeholder="Coloque o CPF" readonly>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Nome</label>
-                                        <input type="text" name="nomeP" value="<?=$paciente['nomeP'];?>" class="form-control" placeholder="Nome completo" required>
+                                        <input type="text" name="nomeP" value="<?= $paciente['nomeP']; ?>" class="form-control" placeholder="Nome completo" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>RG</label>
+                                        <input type="text"  name="RGP" value="<?= !empty($paciente['RGP']) ? $paciente['RGP'] : '<span class="text-danger">RG não cadastrado</span>'; ?>" class="form-control" placeholder="Insira o RG (opicional)">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Cartão Nacional da Saúde</label>
+                                        <input type="text" name="CNSP" value="<?= !empty($paciente['CNSP']) ? $paciente['CNSP'] : '<span class="text-danger">CNS não cadastrado</span>'; ?>" class="form-control" placeholder="Insira o número do SUS (opicional)">
                                     </div>
                                     <div class="col-md-2">
                                         <label>Data de nascimento</label>
-                                        <input type="date" name="datanascP" value="<?=$paciente['datanascP'];?>" class="form-control" required>
+                                        <input type="date" name="datanascP" value="<?= $paciente['datanascP']; ?>" class="form-control" required>
                                     </div>
                                     <div class="col-md-2">
                                         <label>Idade</label>
-                                        <input type="number" name="idadeP" value="<?=$paciente['idadeP'];?>" class="form-control" required>
+                                        <input type="number" name="idadeP" value="<?= $paciente['idadeP']; ?>" class="form-control" required>
                                     </div>
                                     <div class="col-md-4">
                                         <label>Telefone</label>
@@ -78,15 +86,15 @@ include('conexao.php');
                                     </div>
                                     <div class="col-md-12">
                                         <label>Endereço</label>
-                                        <input type="text" name="enderecoP" value="<?=$paciente['enderecoP'];?>" class="form-control" placeholder="Rua, Bairro, complemento, N°" required>
+                                        <input type="text" name="enderecoP" value="<?= $paciente['enderecoP']; ?>" class="form-control" placeholder="Rua, Bairro, complemento, N°" required>
                                     </div>
                                     <div class="col-md-8">
                                         <label>Município de residência</label>
-                                        <input type="text" name="munResP" value="<?=$paciente['munResP'];?>" class="form-control" placeholder="Iguape" required>
+                                        <input type="text" name="munResP" value="<?= $paciente['munResP']; ?>" class="form-control" placeholder="Iguape" required>
                                     </div>
                                     <div class="col-md-4">
                                         <label>UF</label>
-                                        <input type="text" name="UFP" value="<?=$paciente['UFP'];?>" class="form-control" placeholder="SP, RJ, PR..." required>
+                                        <input type="text" name="UFP" value="<?= $paciente['UFP']; ?>" class="form-control" placeholder="SP, RJ, PR..." required>
                                     </div>
                                     <div class="mb-3">
                                         <button type="submit" name="editar_paciente" class="btn btn-primary">Salvar</button>

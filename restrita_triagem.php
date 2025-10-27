@@ -37,7 +37,7 @@ include('conexao.php');
               <thead>
                 <tr>
                   <th>Ordem</th>
-                  <th>RG/SUS</th>
+                  <th>CPF</th>
                   <th>Nome</th>
                   <th>idade</th>
                   <th>Sexo</th>
@@ -49,7 +49,7 @@ include('conexao.php');
               <tbody>
                 <?php
 
-                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP, e.nomeE FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP LEFT JOIN enfermeiros e ON a.CPFEf = e.CPFE WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
+                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP, e.nomeE FROM atendimentos a JOIN pacientes p ON a.CPFPf = p.CPFP LEFT JOIN enfermeiros e ON a.CPFEf = e.CPFE WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
                 $atendimentos = mysqli_query($conn, $sql);
 
                 if (!$atendimentos) {
@@ -61,7 +61,7 @@ include('conexao.php');
                 ?>
                     <tr>
                       <td><?= $atendimento['ordem'] ?></td>
-                      <td><?= $atendimento['RGSUSPf'] ?></td>
+                      <td><?= $atendimento['CPFPf'] ?></td>
                       <td><?= $atendimento['nomeP'] ?></td>
                       <td><?= $atendimento['idadeP'] ?></td>
                       <td><?= $atendimento['sexoP'] ?></td>
@@ -75,9 +75,9 @@ include('conexao.php');
                         <a href="atender_paciente.php?aten_id=<?= $atendimento['codAten'] ?>" class="btn btn-success btn-sm ">Atender</a>
                       </td>
                       <td>
-                        <?php if ($atendimento['situacao'] === 'esperando'): ?>
+                        <?php if ($atendimento['situacao'] === 'Esperando'): ?>
                           <span class="badge bg-secondary"><i class="bi bi-hourglass-split"></i> Em espera</span>
-                        <?php elseif ($atendimento['situacao'] === 'em_atendimento'): 
+                        <?php elseif ($atendimento['situacao'] === 'Na triagem'): 
                           $primeiroNome = explode(' ', trim($atendimento['nomeE']))[0];
                           ?>
                           <span class="badge bg-danger"><i class="bi bi-exclamation-triangle-fill"></i> Em atendimento(<?=htmlspecialchars($primeiroNome)?>)</span>

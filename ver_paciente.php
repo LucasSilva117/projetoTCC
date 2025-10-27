@@ -32,77 +32,89 @@ include('conexao.php');
                     </div>
                     <div class="card-body">
                         <div class="row row-g3">
-                        <?php 
-                        if(isset($_GET['id'])){
-                            $paciente_id = mysqli_real_escape_string($conn, $_GET['id']);
-                            $sql = "SELECT * FROM pacientes WHERE id='$paciente_id'";
-                            $query = mysqli_query($conn, $sql);
+                            <?php
+                            if (isset($_GET['codP'])) {
+                                $paciente_id = mysqli_real_escape_string($conn, $_GET['codP']);
+                                $sql = "SELECT * FROM pacientes WHERE codP='$paciente_id'";
+                                $query = mysqli_query($conn, $sql);
 
-                            if(mysqli_num_rows($query) > 0){
-                                $paciente = mysqli_fetch_array($query);
+                                if (mysqli_num_rows($query) > 0) {
+                                    $paciente = mysqli_fetch_array($query);
 
-                        ?>
-                        <div class="col-md-6">
-                            <label>RG/SUS</label>
-                            <p class="form-control">
-                                <?=$paciente['RGSUSP'];?>
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Nome</label>
-                            <p class="form-control">
-                                <?=$paciente['nomeP'];?>
-                            </p>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Data de nascimento</label>
-                            <p class="form-control">
-                                <?=date('d/m/Y', strtotime($paciente['datanascP']))?>
-                            </p>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Idade</label>
-                            <p class="form-control">
-                                <?=$paciente['idadeP'];?>
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Telefone</label>
-                            <p class="form-control">
-                                <?= !empty($paciente['telefoneP']) ? $paciente['telefoneP'] : '<span class="text-danger">Telefone não cadastrado</span>'; ?>
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Sexo</label>
-                            <p class="form-control">
-                                <?=$paciente['sexoP'];?>
-                            </p>
-                        </div>
-                        <div class="col-md-12">
-                            <label>Endereço</label>
-                            <p class="form-control">
-                                <?=$paciente['enderecoP'];?>
-                            </p>
-                        </div>
-                        <div class="col-md-8">
-                            <label>Município de residência</label>
-                            <p class="form-control">
-                                <?=$paciente['munResP'];?>
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <label>UF</label>
-                            <p class="form-control">
-                                <?=$paciente['UFP'];?>
-                            </p>
-                        </div>
-                        <a href="editar_paciente.php?id=<?=$paciente['id']?>" class="btn btn-success btn-sm col-md-2">Editar</a>
-                        <?php 
+                            ?>
+                                    <div class="col-md-6">
+                                        <label>CPF</label>
+                                        <p class="form-control">
+                                            <?= $paciente['CPFP']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Nome</label>
+                                        <p class="form-control">
+                                            <?= $paciente['nomeP']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>RG</label>
+                                        <p class="form-control">
+                                            <?= !empty($paciente['RGP']) ? $paciente['RGP'] : '<span class="text-danger">RG não cadastrado</span>'; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Cartão Nacional da Saúde</label>
+                                        <p class="form-control">
+                                            <?= !empty($paciente['CNSP']) ? $paciente['CNSP'] : '<span class="text-danger">CNS não cadastrado</span>'; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Data de nascimento</label>
+                                        <p class="form-control">
+                                            <?= date('d/m/Y', strtotime($paciente['datanascP'])) ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Idade</label>
+                                        <p class="form-control">
+                                            <?= $paciente['idadeP']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Telefone</label>
+                                        <p class="form-control">
+                                            <?= !empty($paciente['telefoneP']) ? $paciente['telefoneP'] : '<span class="text-danger">Telefone não cadastrado</span>'; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Sexo</label>
+                                        <p class="form-control">
+                                            <?= $paciente['sexoP']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Endereço</label>
+                                        <p class="form-control">
+                                            <?= $paciente['enderecoP']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label>Município de residência</label>
+                                        <p class="form-control">
+                                            <?= $paciente['munResP']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>UF</label>
+                                        <p class="form-control">
+                                            <?= $paciente['UFP']; ?>
+                                        </p>
+                                    </div>
+                                    <a href="editar_paciente.php?codP=<?= $paciente['codP'] ?>" class="btn btn-success btn-sm col-md-2">Editar</a>
+                            <?php
+                                }
+                            } else {
+                                echo "<h5>Paciente não identificado</h5>";
                             }
-                        } else{
-                            echo "<h5>Paciente não identificado</h5>";
-                        }
-                        ?>
+                            ?>
                         </div>
 
 

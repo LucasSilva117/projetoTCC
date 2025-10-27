@@ -3,7 +3,7 @@ include('protectR.php');
 include('conexao.php');
 
 // Recebendo filtros (se existirem)
-$rg = $_GET['rg'] ?? '';
+$cpf = $_GET['cpf'] ?? '';
 $nome = $_GET['nome'] ?? '';
 $sexo = $_GET['sexo'] ?? '';
 
@@ -13,9 +13,9 @@ $sql = "SELECT *
         WHERE 1=1";
 
 // Se o filtro foi preenchido, adiciona condição
-if (!empty($_GET['rg'])) {
-    $rg = mysqli_real_escape_string($conn, $_GET['rg']);
-    $sql .= " AND RGSUSP LIKE '$rg%'";
+if (!empty($_GET['cpf'])) {
+    $cpf = mysqli_real_escape_string($conn, $_GET['cpf']);
+    $sql .= " AND CPFP LIKE '$cpf%'";
 }
 
 if (!empty($_GET['nome'])) {
@@ -29,7 +29,7 @@ if (!empty($_GET['sexo'])) {
 }
 
 // Ordenar por mais recente
-$sql .= " ORDER BY id DESC";
+$sql .= " ORDER BY codP DESC";
 
 $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
 ?>
@@ -64,8 +64,8 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                     </div>
                     <form method="get" class="row g-3 mb-4">
                         <div class="col-md-3">
-                            <label>RG:</label>
-                            <input type="text" name="rg" class="form-control" value="<?= htmlspecialchars($rg) ?>">
+                            <label>CPF:</label>
+                            <input type="text" name="cpf" class="form-control" value="<?= htmlspecialchars($cpf) ?>">
                         </div>
                         <div class="col-md-3">
                             <label>Nome</label>
@@ -89,7 +89,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>RG/SUS</th>
+                                    <th>CPF</th>
                                     <th>Nome</th>
                                     <th>idade</th>
                                     <th>DN</th>
@@ -108,15 +108,15 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                     while ($row = mysqli_fetch_assoc($query)): ?>
 
                                 <tr>
-                                    <td><?=$row['RGSUSP']?></td>
+                                    <td><?=$row['CPFP']?></td>
                                     <td><?=$row['nomeP']?></td>
                                     <td><?=$row['idadeP']?></td>
                                     <td><?=date('d/m/Y', strtotime($row['datanascP']))?></td>
                                     <td><?=$row['sexoP']?></td>
                                     <td>
-                                        <a href="ver_paciente.php?id=<?=$row['id']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
+                                        <a href="ver_paciente.php?codP=<?=$row['codP']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
                                         <form action="acoespacientes.php" method="post" class="d-inline">
-                                            <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_paciente" value="<?=$row['id']?>" class="btn btn-danger btn-sm">
+                                            <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_paciente" value="<?=$row['codP']?>" class="btn btn-danger btn-sm">
                                                 Excluir
                                             </button>
                                         </form>

@@ -29,10 +29,10 @@ Gerencia os cadastros de funcionários;
 Tem acesso à estatíticas da unidade(Sobre pacientes, atendimentos e funcionários)
 
 <h3>Mudanças previstas:</h3>
-Em pacientes, colocar o CPF como chave primária e RG e SUS como campos opicionais;
 Fazer a funcionalidade do médico e fazer dar certo a impressão;
-Ao modificar os dados, colocar uma notificação com os dados modificados;
 Pesquisar sobre o uso do CID(Classificação Internacional de Doença);
+Em pacientes, colocar o CPF como chave primária e RG e SUS como campos opicionais ✅;
+Ao modificar os dados, colocar uma notificação com os dados modificados ✅;
 Criptografia hash em todas as senhas ✅;
 Não poder mudar a hora do atendimento no formulário ✅;
 No status do atendimento mostrar quem está atendendo✅

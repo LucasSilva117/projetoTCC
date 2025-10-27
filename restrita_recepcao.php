@@ -39,7 +39,7 @@ include('conexao.php');
               <thead>
                 <tr>
                   <th>Ordem</th>
-                  <th>RG/SUS</th>
+                  <th>CPF</th>
                   <th>Nome</th>
                   <th>idade</th>
                   <th>Sexo</th>
@@ -51,7 +51,7 @@ include('conexao.php');
               <tbody>
                 <?php
 
-                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP, e.nomeE FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP LEFT JOIN enfermeiros e ON a.CPFEf = e.CPFE WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
+                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP, e.nomeE FROM atendimentos a JOIN pacientes p ON a.CPFPf = p.CPFP LEFT JOIN enfermeiros e ON a.CPFEf = e.CPFE WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
                 $atendimentos = mysqli_query($conn, $sql);
 
                 if (!$atendimentos) {
@@ -63,14 +63,14 @@ include('conexao.php');
                 ?>
                     <tr>
                       <td><?= $atendimento['ordem'] ?></td>
-                      <td><?= $atendimento['RGSUSPf'] ?></td>
+                      <td><?= $atendimento['CPFPf'] ?></td>
                       <td><?= $atendimento['nomeP'] ?></td>
                       <td><?= $atendimento['idadeP'] ?></td>
                       <td><?= $atendimento['sexoP'] ?></td>
                       <td><?= $atendimento['horaA'] ?></td>
                       <td>
                         <form action="acoespacientes.php" method="post" class="d-inline">
-                          <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')"
+                          <button onclick="return confirm('Tem certeza que deseja excluir esse atendimento?')"
                             type="submit"
                             name="excluir_atendimento"
                             value="<?= $atendimento['codAten'] ?>"
@@ -80,9 +80,9 @@ include('conexao.php');
                         </form>
                       </td>
                       <td>
-                        <?php if ($atendimento['situacao'] === 'esperando'): ?>
+                        <?php if ($atendimento['situacao'] === 'Esperando'): ?>
                           <span class="badge bg-secondary"><i class="bi bi-hourglass-split"></i> Em espera</span>
-                        <?php elseif ($atendimento['situacao'] === 'em_atendimento'): 
+                        <?php elseif ($atendimento['situacao'] === 'Na triagem'): 
                           $primeiroNome = explode(' ', trim($atendimento['nomeE']))[0];
                           ?>
                           <span class="badge bg-danger"><i class="bi bi-exclamation-triangle-fill"></i> Em atendimento(<?=htmlspecialchars($primeiroNome)?>)</span>
@@ -116,14 +116,14 @@ include('conexao.php');
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
-            <input type="text" id="rgBusca" class="form-control" placeholder="Digite o RG/SUS">
+            <input type="text" id="cpfBusca" class="form-control" placeholder="Digite o CPF">
             <button class="btn btn-success" id="btnBuscar">Buscar</button>
           </div>
 
           <table class="table table-bordered" id="resultadoBusca">
             <thead>
               <tr>
-                <th>RG/SUS</th>
+                <th>CPF</th>
                 <th>Nome</th>
                 <th>Ação</th>
               </tr>
@@ -133,7 +133,7 @@ include('conexao.php');
             </tbody>
           </table>
           <form id="formAdicionar" method="post" action="acoespacientes.php">
-            <input type="hidden" name="RGSUSP" id="rgHidden">
+            <input type="hidden" name="CPFP" id="cpfHidden">
             <input type="hidden" name="adicionar_atendimento" value="1">
           </form>
         </div>
@@ -144,8 +144,8 @@ include('conexao.php');
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.getElementById('btnBuscar').addEventListener('click', function() {
-      var rg = document.getElementById('rgBusca').value;
-      fetch('buscar_paciente.php?rg=' + rg)
+      var cpf = document.getElementById('cpfBusca').value;
+      fetch('buscar_paciente.php?cpf=' + cpf)
         .then(response => response.json())
         .then(data => {
           console.log(data);
@@ -154,10 +154,10 @@ include('conexao.php');
           data.forEach(paciente => {
             tbody.innerHTML += `
                     <tr>
-                        <td>${paciente.RGSUSP}</td>
+                        <td>${paciente.CPFP}</td>
                         <td>${paciente.nomeP}</td>
                         <td>
-                          <button type="button" class="btn btn-primary btnAdicionar" data-rg="${paciente.RGSUSP}">
+                          <button type="button" class="btn btn-primary btnAdicionar" data-cpf="${paciente.CPFP}">
                             Adicionar
                           </button>
                         </td>
@@ -170,8 +170,8 @@ include('conexao.php');
     // Enviar formulário para acoes_paciente.php
     document.addEventListener('click', function(e) {
       if (e.target.classList.contains('btnAdicionar')) {
-        var rg = e.target.getAttribute('data-rg');
-        document.getElementById('rgHidden').value = rg;
+        var cpf = e.target.getAttribute('data-cpf');
+        document.getElementById('cpfHidden').value = cpf;
         document.getElementById('formAdicionar').submit();
       }
     });

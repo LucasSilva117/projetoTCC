@@ -50,12 +50,12 @@ include('conexao.php');
                                 $result_check = mysqli_query($conn, $sql_check);
                                 $row = mysqli_fetch_assoc($result_check);
 
-                                if ($row && $row['situacao'] == 'esperando') {
-                                    $sql_update = "UPDATE atendimentos SET situacao = 'em_atendimento', CPFEf = '$cpf_enfermeiro' WHERE codAten = '$atendimento_id'";
+                                if ($row && $row['situacao'] == 'Esperando') {
+                                    $sql_update = "UPDATE atendimentos SET situacao = 'Na triagem', CPFEf = '$cpf_enfermeiro' WHERE codAten = '$atendimento_id'";
                                     mysqli_query($conn, $sql_update);
                                 }
 
-                                $sql = "SELECT a.*, p.* FROM atendimentos a JOIN pacientes p ON a.RGSUSPf = p.RGSUSP WHERE a.codAten = '$atendimento_id'";
+                                $sql = "SELECT a.*, p.* FROM atendimentos a JOIN pacientes p ON a.CPFPf = p.CPFP WHERE a.codAten = '$atendimento_id'";
                                 $query = mysqli_query($conn, $sql);
 
                                 if (mysqli_num_rows($query) > 0) {
@@ -69,15 +69,27 @@ include('conexao.php');
                             <h4>Dados do paciente</h4>
                             <form action="" method="post" class="row g-3">
                                 <div class="col-md-6">
-                                    <label>RG/SUS</label>
+                                    <label>CPF</label>
                                     <p class="form-control">
-                                        <?= $paciente['RGSUSP']; ?>
+                                        <?= $paciente['CPFP']; ?>
                                     </p>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Nome</label>
                                     <p class="form-control">
                                         <?= $paciente['nomeP']; ?>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>RG</label>
+                                    <p class="form-control">
+                                        <?= !empty($paciente['RGP']) ? $paciente['RGP'] : '<span class="text-danger">RG não cadastrado</span>'; ?>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cartão Nacional da Saúde</label>
+                                    <p class="form-control">
+                                        <?= !empty($paciente['CNSP']) ? $paciente['CNSP'] : '<span class="text-danger">CNS não cadastrado</span>'; ?>
                                     </p>
                                 </div>
                                 <div class="col-md-2">

@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db = "bdtcc";
+$db = "BDsefaps";
 $port = 3306;
 
 // Aqui a variável $conn recebe a conexão:
