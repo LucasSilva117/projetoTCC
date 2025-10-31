@@ -45,7 +45,7 @@ if (isset($_POST['excluir_paciente'])) {
     }
 }
 
-if (isset($_POST['editar_paciente'])) {
+if (isset($_POST['editar_paciente']) || (isset($_POST['acao']) && $_POST['acao'] === 'editar_paciente')) {
     $paciente_id = mysqli_real_escape_string($conn, $_POST['codP']);
 
     $RG = $_POST['CPFP'] ?? null;
@@ -109,8 +109,8 @@ if (isset($_POST['adicionar_atendimento'])) {
     $ordem = $row['total'] + 1;
 
     // Inserir paciente
-    $sqlInsert = "INSERT INTO atendimentos (CPFRf, CPFPf, CPFEf, dataA, horaA, ordem, situacao)
-                  VALUES ('$CPFR', '$CPFP', '', '$dataHoje', '$horaAgora', '$ordem', 'Esperando')";
+    $sqlInsert = "INSERT INTO atendimentos (CPFRf, CPFPf, CPFEf, CPFMf, dataA, horaA, ordem, situacao)
+                  VALUES ('$CPFR', '$CPFP', '', '', '$dataHoje', '$horaAgora', '$ordem', 'Esperando')";
 
     if (mysqli_query($conn, $sqlInsert)) {
         echo "<script>alert('Paciente adicionado com sucesso!'); location.href='restrita_recepcao.php';</script>";
@@ -224,3 +224,68 @@ if (isset($_POST['voltar_atendimento'])) {
     exit;
 }
 
+// AÇÕES NO ATENDIMENTO (CONSULTÓRIO)
+
+if (isset($_POST['consulta_paciente'])) {
+    session_start();
+    $CPFM = $_SESSION['CPFM'] ?? null; // CPF do médico logado
+    $codAten = $_POST['codAten'] ?? null; // codAten enviado pelo hidden no formulario
+
+    $sql_update = "UPDATE atendimentos SET situacao = 'Finalizado', WHERE codAten = '$codAten'";
+    mysqli_query($conn, $sql_update); //atualizando a situacao em atendimentos
+
+    // completar com os dados da consulta
+    $horaC = $_POST['horaC'] ?? null;
+    $exameClinico = $_POST['exameClinico'] ?? null;
+    $conduta = $_POST['conduta'] ?? null;
+    $sql = "INSERT INTO consultas(CPFMf, codAtenf, horaC, exameClinico, conduta) VALUES 
+    ('$CPFM','$codAten','$horaC','$exameClinico','$conduta')";
+    mysqli_query($conn, $sql);
+
+    if (mysqli_affected_rows($conn) > 0) {
+        echo "<script>alert('Atendimento finalizado com sucesso!!'); location.href='restrita_medico.php'; </script>";
+    } else {
+        echo "Erro no banco: " . mysqli_error($conn);
+    }
+}
+
+if (isset($_POST['excluir_atendimentoC'])) {
+    $codAten = mysqli_real_escape_string($conn, $_POST['excluir_atendimentoC']);
+
+    // verifica a situação antes
+    $sql_check = "SELECT situacao FROM atendimentos WHERE codAten = '$codAten'";
+    $result_check = mysqli_query($conn, $sql_check);
+    $atendimento = mysqli_fetch_assoc($result_check);
+
+    if ($atendimento && $atendimento['situacao'] === 'Na consulta') {
+        // bloqueia a exclusão
+        echo "<script>alert('Não é possível excluir um atendimento que está em atendimento!');location.href='restrita_medico.php';</script>";
+        exit;
+    }
+
+    //exclusão 
+    $codAten = mysqli_real_escape_string($conn, $_POST['excluir_atendimentoC']);
+    $sql = "DELETE FROM atendimentos WHERE codAten = '$codAten'";
+    mysqli_query($conn, $sql);
+
+    if (mysqli_affected_rows($conn) > 0) {
+        echo "<script>alert('Atendimento excluido com sucesso!!');location.href='restrita_medico.php';</script>";
+    } else {
+        echo "<script>alert('Não foi possivel excluir esse atendimento!!');location.href='restrita_medico.php';</script>";
+    }
+}
+
+if (isset($_POST['voltar_atendimentoC'])) {
+    $codAten = mysqli_real_escape_string($conn, $_POST['codAten']);
+
+    // Atualiza a situação para "esperando consulta"
+    $sql = "UPDATE atendimentos SET situacao = 'Esperando consulta' WHERE codAten = '$codAten'";
+    mysqli_query($conn, $sql);
+
+    if (mysqli_affected_rows($conn) > 0) {
+        echo "<script>alert('Atendimento voltou para a fila de espera para consulta!'); location.href='restrita_medico.php';</script>";
+    } else {
+        echo "<script>alert('Erro ao voltar atendimento!'); location.href='restrita_medico.php';</script>";
+    }
+    exit;
+}

@@ -47,6 +47,7 @@ include('conexao.php');
                         ?>
                                 <form action="acoespacientes.php" method="post" class="row g-3">
                                     <input type="hidden" name="codP" value="<?= $paciente['codP']; ?>">
+                                    <input type="hidden" name="acao" value="editar_paciente">
                                     <div class="col-md-6">
                                         <label>CPF</label>
                                         <input type="text" name="CPFP" value="<?= $paciente['CPFP']; ?>" class="form-control" placeholder="Coloque o CPF" readonly>
@@ -57,11 +58,11 @@ include('conexao.php');
                                     </div>
                                     <div class="col-md-6">
                                         <label>RG</label>
-                                        <input type="text"  name="RGP" value="<?= !empty($paciente['RGP']) ? $paciente['RGP'] : '<span class="text-danger">RG não cadastrado</span>'; ?>" class="form-control" placeholder="Insira o RG (opicional)">
+                                        <input type="text" name="RGP" value="<?= !empty($paciente['RGP']) ? $paciente['RGP'] : ''; ?>" class="form-control" placeholder="<?= !empty($paciente['RGP']) ? $paciente['RGP'] : 'RG não cadastrado'; ?>">
                                     </div>
                                     <div class="col-md-6">
                                         <label>Cartão Nacional da Saúde</label>
-                                        <input type="text" name="CNSP" value="<?= !empty($paciente['CNSP']) ? $paciente['CNSP'] : '<span class="text-danger">CNS não cadastrado</span>'; ?>" class="form-control" placeholder="Insira o número do SUS (opicional)">
+                                        <input type="text" name="CNSP" value="<?= !empty($paciente['CNSP']) ? $paciente['CNSP'] : ''; ?>" class="form-control" placeholder="<?= !empty($paciente['CNSP']) ? $paciente['CNSP'] : 'CNS não cadastrado'; ?>">
                                     </div>
                                     <div class="col-md-2">
                                         <label>Data de nascimento</label>
@@ -96,8 +97,8 @@ include('conexao.php');
                                         <label>UF</label>
                                         <input type="text" name="UFP" value="<?= $paciente['UFP']; ?>" class="form-control" placeholder="SP, RJ, PR..." required>
                                     </div>
-                                    <div class="mb-3">
-                                        <button type="submit" name="editar_paciente" class="btn btn-primary">Salvar</button>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-primary col-md-4">Salvar</button>
                                     </div>
                                 </form>
                         <?php
@@ -114,7 +115,128 @@ include('conexao.php');
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <!-- Modal para mostrar mudanças -->
+    <div class="modal fade" id="changesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirme as alterações</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body" id="changesModalBody">
+                    <!-- Conteúdo preenchido via JS -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="confirmChangesBtn" type="button" class="btn btn-primary">Confirmar e salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Dados originais gerados pelo PHP (ajustados para pacientes)
+        const originalData = <?= json_encode([
+                                    'CPFP'      => $paciente['CPFP'] ?? '',
+                                    'nomeP'     => $paciente['nomeP'] ?? '',
+                                    'RGP'       => $paciente['RGP'] ?? '',
+                                    'CNSP'      => $paciente['CNSP'] ?? '',
+                                    'datanascP' => $paciente['datanascP'] ?? '',
+                                    'idadeP'    => $paciente['idadeP'] ?? '',
+                                    'telefoneP' => $paciente['telefoneP'] ?? '',
+                                    'sexoP'     => $paciente['sexoP'] ?? '',
+                                    'enderecoP' => $paciente['enderecoP'] ?? '',
+                                    'munResP'   => $paciente['munResP'] ?? '',
+                                    'UFP'       => $paciente['UFP'] ?? ''
+                                ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+
+        function labelFor(key) {
+            const labels = {
+                CPFP: 'CPF',
+                nomeP: 'Nome',
+                RGP: 'RG',
+                CNSP: 'Cartão Nacional da Saúde',
+                datanascP: 'Data de Nascimento',
+                idadeP: 'Idade',
+                telefoneP: 'Telefone',
+                sexoP: 'Sexo',
+                enderecoP: 'Endereço',
+                munResP: 'Município de residência',
+                UFP: 'UF'
+            };
+            return labels[key] || key;
+        }
+
+        function showChanges(form) {
+            const fields = Object.keys(originalData);
+            const current = {};
+
+            fields.forEach(f => {
+                const el = form.elements[f];
+                let val = '';
+                if (el) {
+                    if (el.tagName === 'SELECT') val = el.options[el.selectedIndex]?.value ?? '';
+                    else val = (el.value ?? '');
+                }
+                current[f] = String(val).trim();
+            });
+
+            const changes = [];
+            fields.forEach(key => {
+                const orig = String(originalData[key] ?? '').trim();
+                const now = String(current[key] ?? '').trim();
+                if (orig !== now) {
+                    changes.push({
+                        key,
+                        from: orig === '' ? '(vazio)' : orig,
+                        to: now === '' ? '(vazio)' : now
+                    });
+                }
+            });
+
+            const modalBody = document.getElementById('changesModalBody');
+            modalBody.innerHTML = '';
+
+            if (changes.length === 0) {
+                if (confirm('Nenhuma alteração detectada. Deseja salvar mesmo assim?')) form.submit();
+                return;
+            }
+
+            const ul = document.createElement('ul');
+            ul.className = 'list-group';
+            changes.forEach(ch => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = `${labelFor(ch.key)}: ${ch.from} → ${ch.to}`;
+                ul.appendChild(li);
+            });
+            modalBody.appendChild(ul);
+
+            const confirmBtn = document.getElementById('confirmChangesBtn');
+            // remover listener anterior para evitar múltiplos submit
+            confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+            const newConfirm = document.getElementById('confirmChangesBtn');
+            newConfirm.addEventListener('click', () => form.submit());
+
+            const modal = new bootstrap.Modal(document.getElementById('changesModal'));
+            modal.show();
+        }
+
+        // Intercepta o submit do formulário de edição de paciente
+        document.addEventListener('DOMContentLoaded', () => {
+            // Seleciona o formulário de edição (único formulário que envia para acoespacientes.php neste arquivo)
+            const form = document.querySelector('form[action="acoespacientes.php"]');
+            if (!form) return;
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                showChanges(form);
+            }, {
+                once: false
+            });
+        });
+    </script>
 </body>
 
 </html>

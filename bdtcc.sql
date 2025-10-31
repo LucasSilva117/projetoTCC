@@ -55,6 +55,7 @@
     create table triagens(
     codAtenT int AUTO_INCREMENT primary key,  
     CPFEf varchar(11),
+    CPFMf varchar(11),
     codAtenf int,
     temDiarreia varchar(3),
     tempoSintomas date,
@@ -68,7 +69,7 @@
     temperatura varchar(4),
     glicemia varchar(3),
     SPO varchar(3),
-    clascRisco varchar(8), 
+    clascRisco varchar(8), /* "vermelho", "amarelo", "verde", "azul" */
     peso float, 
     horaT time,
     observacao varchar(255), 
