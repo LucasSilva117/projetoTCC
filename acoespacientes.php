@@ -248,7 +248,7 @@ if (isset($_POST['consulta_paciente']) || (isset($_POST['acao']) && $_POST['acao
     ($CPFM,'$codAtenT','$codAten','$horaC','$exameClinico','$conduta')";
     mysqli_query($conn, $sql);
 
-    if ($imprimir == '1') {
+    if ($imprimir) {
         // Carrega dados completos para o relatório (aten + paciente + triagem)
         $sql = "SELECT a.*, p.*, t.* 
                 FROM atendimentos a
@@ -367,6 +367,7 @@ if (isset($_POST['consulta_paciente']) || (isset($_POST['acao']) && $_POST['acao
         exit;
     }else {
         echo "<script>alert('Consulta realizada com sucesso!'); location.href='restrita_medico.php';</script>";
+        exit;
     }
 }
 

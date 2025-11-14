@@ -315,6 +315,8 @@ include('conexao.php');
 
                                                 setTimeout(() => {
                                                     form.submit();
+
+                                                    window.location.href = 'restrita_medico.php';
                                                 }, 300);
                                             });
                                         }
@@ -331,12 +333,16 @@ include('conexao.php');
                                                 // Aguarda o modal fechar e depois envia o form
                                                 setTimeout(() => {
                                                     form.submit();
+
+                                                    // Redirecionar a aba original de volta
+                                                    setTimeout(() => {
+                                                        window.location.href = 'restrita_medico.php';
+                                                    }, 500); // espera o form enviar antes de recarregar
                                                 }, 300); // pequeno delay pro modal sumir
                                             });
-                                            
+
                                         };
                                     });
-                                   
                                 </script>
                         <?php
                                 }

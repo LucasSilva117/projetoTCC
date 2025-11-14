@@ -40,8 +40,9 @@
     create TABLE atendimentos(
     codAten int AUTO_INCREMENT PRIMARY KEY,
     CPFRf varchar(11) NOT NULL,
-    CPFEf varchar(11) ,
+    CPFEf varchar(11) NULL,
     CPFPf varchar(11) NOT NULL,
+    CPFMf varchar(11) NULL,
     dataA date,
     horaA time, 
     ordem varchar(100),
@@ -55,7 +56,7 @@
     create table triagens(
     codAtenT int AUTO_INCREMENT primary key,  
     CPFEf varchar(11),
-    CPFMf varchar(11),
+    CPFMf varchar(11) NULL,
     codAtenf int,
     temDiarreia varchar(3),
     tempoSintomas date,
