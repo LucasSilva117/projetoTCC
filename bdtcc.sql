@@ -5,8 +5,8 @@
     create TABLE pacientes(
     codP INT AUTO_INCREMENT PRIMARY KEY,
     CPFP varchar(11) NOT NULL UNIQUE,
-    RGP varchar(15) UNIQUE,
-    CNSP varchar(15) UNIQUE,
+    RGP varchar(15) NULL,
+    CNSP varchar(15) NULL,
     nomeP varchar(100),
     datanascP date,
     idadeP int, 

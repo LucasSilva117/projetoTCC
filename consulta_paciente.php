@@ -28,8 +28,8 @@ include('conexao.php');
                 <div class="card">
                     <div class="card-header">
                         <h4>Atender paciente (consultório)
-                            <?php if (isset($_GET['codP'])) {
-                                $atendimento_id = mysqli_real_escape_string($conn, $_GET['codP']);
+                            <?php if (isset($_GET['aten_id'])) {
+                                $atendimento_id = mysqli_real_escape_string($conn, $_GET['aten_id']);
                             ?>
                                 <form action="acoespacientes.php" method="post" onsubmit="return confirm('Tem certeza que quer voltar? Os dados serão perdidos!');">
                                     <input type="hidden" name="codAten" value="<?= $atendimento_id ?>">
@@ -45,7 +45,7 @@ include('conexao.php');
                                 FROM atendimentos a
                                 JOIN pacientes p ON a.CPFPf = p.CPFP
                                 LEFT JOIN triagens t ON t.codAtenf = a.codAten 
-                                WHERE t.codAtenT = '$atendimento_id'";
+                                WHERE a.codAten = '$atendimento_id'";
                                 $query = mysqli_query($conn, $sql);
 
                                 if (mysqli_num_rows($query) > 0) {
@@ -233,8 +233,15 @@ include('conexao.php');
                                     </div>
                                 </form>
                                 <!-- Área do consultório (médico) -->
-                                <form action="acoespacientes.php" method="post" class="row g-3 border border-2 border-secondary">
+                                <div class="container-sm">
+                                    <h4 class="mb-4">Consultório</h4>
+                                </div>
+                                <form action="acoespacientes.php" method="post" id="formConsulta"
+                                    class="row g-3 border border-2 border-secondary">
                                     <input type="hidden" name="codAten" value="<?= $atendimento_id ?>">
+                                    <input type="hidden" name="codAtenT" value="<?= $codAtenT ?>">
+                                    <input type="hidden" name="imprimir" id="imprimir" value="0">
+                                    <input type="hidden" name="acao" value="consulta_paciente">
 
                                     <div class="col-md-6">
                                         <label>Hora do atendimento (Médico)</label>
@@ -243,44 +250,118 @@ include('conexao.php');
 
                                     <div class="col-md-12">
                                         <label>Exame Clínico</label>
-                                        <textarea name="exameClinico" class="form-control" rows="6" cols="150" placeholder="Descreva o exame clínico"></textarea>
+                                        <textarea name="exameClinico" id="exameClinico" class="form-control" rows="6" cols="150" placeholder="Descreva o exame clínico"></textarea>
                                     </div>
 
                                     <div class="col-md-12">
                                         <label>Conduta</label>
-                                        <textarea name="conduta" class="form-control" rows="6" cols="150" placeholder="Descreva a conduta"></textarea>
+                                        <textarea name="conduta" id="conduta" class="form-control" rows="6" cols="150" placeholder="Descreva a conduta"></textarea>
                                     </div>
 
                                     <div class="col-md-4">
-                                        <button type="submit" name="consulta_paciente" class="btn btn-primary">Finalizar atendimento</button>
+                                        <button type="submit" name="consulta_paciente" id="btnFinalizar" class="btn btn-primary">Finalizar atendimento</button>
                                     </div>
                                     <!-- Ao clicar em finalizar atendimento, vai gerar uma notificação perguntando se deseja imprimir o relatório -->
                                 </form>
-                            </div>
-                    <?php
+                                <!-- Modal confirmar salvar / salvar e imprimir -->
+                                <div class="modal fade" id="confirmSaveModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Finalizar atendimento</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Deseja apenas salvar ou salvar e imprimir o relatório?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" id="btnSaveOnly" class="btn btn-secondary" data-bs-dismiss="modal">Salvar somente</button>
+                                                <button type="button" id="btnSavePrint" class="btn btn-primary" target="_blank">Salvar e imprimir</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const form = document.getElementById('formConsulta');
+                                        if (!form) return;
+
+                                        const imprimirInput = document.getElementById('imprimir'); // hidden input
+                                        const confirmModalEl = document.getElementById('confirmSaveModal');
+                                        const btnSaveOnly = document.getElementById('btnSaveOnly');
+                                        const btnSavePrint = document.getElementById('btnSavePrint');
+
+                                        form.addEventListener('submit', function(e) {
+                                            e.preventDefault();
+
+                                            // se não houver modal, usa confirm() padrão
+                                            if (!confirmModalEl || typeof bootstrap === 'undefined') {
+                                                const imprimir = confirm('Deseja salvar e imprimir o relatório? OK = Imprimir, Cancel = Salvar somente');
+                                                if (imprimirInput) imprimirInput.value = imprimir ? '1' : '0';
+                                                return form.submit();
+                                            }
+
+                                            const bsModal = new bootstrap.Modal(confirmModalEl);
+                                            bsModal.show();
+                                        });
+
+                                        if (btnSaveOnly) {
+                                            btnSaveOnly.addEventListener('click', function() {
+                                                if (imprimirInput) imprimirInput.value = '0';
+                                                const modalEl = document.getElementById('confirmSaveModal');
+                                                const bsModal = bootstrap.Modal.getInstance(modalEl);
+                                                if (bsModal) bsModal.hide();
+
+                                                setTimeout(() => {
+                                                    form.submit();
+                                                }, 300);
+                                            });
+                                        }
+
+                                        if (btnSavePrint) {
+                                            btnSavePrint.addEventListener('click', function() {
+                                                if (imprimirInput) imprimirInput.value = '1';
+                                                const originalTarget = form.target;
+                                                form.target = '_blank'; //  abre nova aba
+                                                const modalEl = document.getElementById('confirmSaveModal');
+                                                const bsModal = bootstrap.Modal.getInstance(modalEl);
+                                                if (bsModal) bsModal.hide();
+
+                                                // Aguarda o modal fechar e depois envia o form
+                                                setTimeout(() => {
+                                                    form.submit();
+                                                }, 300); // pequeno delay pro modal sumir
+                                            });
+                                            
+                                        };
+                                    });
+                                   
+                                </script>
+                        <?php
                                 }
                             } else {
                                 echo "<h5>Paciente não identificado</h5>";
                             }
-                    ?>
+                        ?>
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <script>
-        window.addEventListener("load", function() {
-            let agora = new Date();
-            let horas = String(agora.getHours()).padStart(2, '0');
-            let minutos = String(agora.getMinutes()).padStart(2, '0');
-            document.getElementById("hora").value = `${horas}:${minutos}`;
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+        <script>
+            window.addEventListener("load", function() {
+                let agora = new Date();
+                let horas = String(agora.getHours()).padStart(2, '0');
+                let minutos = String(agora.getMinutes()).padStart(2, '0');
+                document.getElementById("hora").value = `${horas}:${minutos}`;
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+        </script>
 </body>
 
 </html>

@@ -74,7 +74,7 @@ include('conexao.php');
                       <td><?= $atendimento['nomeP'] ?></td>
                       <td><?= $atendimento['idadeP'] ?></td>
                       <td><?= $atendimento['sexoP'] ?></td>
-                      <td><?= $atendimento['horaA'] / $atendimento['horaT']?></td>
+                      <td><?= $atendimento['horaA'] ?> / <?= $atendimento['horaT'] ?></td>
                       <td><strong><?= $atendimento['clascRisco']?></strong></td>
                       <td>
                         <form action="acoespacientes.php" method="post" class="d-inline">
