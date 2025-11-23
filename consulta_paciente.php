@@ -19,7 +19,7 @@ include('conexao.php');
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-md">
             <h1 style="color: white;">Atendimento</h1>
-            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair</a></p>
+            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
         </div>
     </nav>
     <div class="container-md">
@@ -41,6 +41,22 @@ include('conexao.php');
                     </div>
                     <div class="card-body">
                         <?php
+                                // Pegando CPF do médico que clicou em atender
+                                if (!isset($_SESSION)) {
+                                    session_start();
+                                }
+                                $cpf_medico = $_SESSION['CPFM'];
+                                // Só muda para "em_atendimento" se ainda estiver "Esperando consulta"
+                                $sql_check = "SELECT * FROM atendimentos WHERE codAten = '$atendimento_id'";
+                                $result_check = mysqli_query($conn, $sql_check);
+                                $row = mysqli_fetch_assoc($result_check);
+
+                                if ($row && $row['situacao'] == 'Esperando consulta') {
+                                    $sql_update = "UPDATE atendimentos SET situacao = 'Na consulta', CPFMf = '$cpf_medico' WHERE codAten = '$atendimento_id'";
+                                    mysqli_query($conn, $sql_update);
+                                }
+
+
                                 $sql = "SELECT t.*, a.*, p.* 
                                 FROM atendimentos a
                                 JOIN pacientes p ON a.CPFPf = p.CPFP
@@ -313,17 +329,45 @@ include('conexao.php');
                                                 const bsModal = bootstrap.Modal.getInstance(modalEl);
                                                 if (bsModal) bsModal.hide();
 
-                                                setTimeout(() => {
-                                                    form.submit();
-                                                }, 300);
+                                                setTimeout(async () => {
+                                                    // envia via fetch para evitar abrir nova aba e garantir que a aba atual feche/retorne
+                                                    try {
+                                                        btnSaveOnly.disabled = true;
+                                                        if (btnSavePrint) btnSavePrint.disabled = true;
+
+                                                        const fd = new FormData(form);
+                                                        fd.set('imprimir', '0');
+                                                        // garantir que o envio ocorra na mesma aba
+                                                        form.target = '_self';
+
+                                                        await fetch(form.action, {
+                                                            method: (form.method || 'POST').toUpperCase(),
+                                                            body: fd,
+                                                            credentials: 'same-origin'
+                                                        });
+
+                                                        // redireciona a aba atual para o painel do médico
+                                                        window.location.replace('restrita_medico.php');
+                                                    } catch (err) {
+                                                        console.error(err);
+                                                        alert('Erro ao salvar. Tente novamente.');
+                                                        btnSaveOnly.disabled = false;
+                                                        if (btnSavePrint) btnSavePrint.disabled = false;
+                                                    }
+                                                }, 250);
                                             });
                                         }
 
                                         if (btnSavePrint) {
                                             btnSavePrint.addEventListener('click', function() {
                                                 if (imprimirInput) imprimirInput.value = '1';
-                                                const originalTarget = form.target;
-                                                form.target = '_blank'; //  abre nova aba
+
+                                                // salva target original para restaurar depois
+                                                const originalTarget = form.target || '';
+                                                // marca atributo com o original (útil se houver múltiplos cliques)
+                                                form.setAttribute('data-original-target', originalTarget);
+
+                                                form.target = '_blank'; // abre nova aba
                                                 const modalEl = document.getElementById('confirmSaveModal');
                                                 const bsModal = bootstrap.Modal.getInstance(modalEl);
                                                 if (bsModal) bsModal.hide();
@@ -331,12 +375,19 @@ include('conexao.php');
                                                 // Aguarda o modal fechar e depois envia o form
                                                 setTimeout(() => {
                                                     form.submit();
-                                                }, 300); // pequeno delay pro modal sumir
+
+                                                    // restaura target para uso futuro
+                                                    form.target = originalTarget;
+                                                    form.removeAttribute('data-original-target');
+
+                                                    // redireciona a aba atual de volta ao painel do médico
+                                                    // usar replace para não deixar histórico (evita voltar à tela de atendimento)
+                                                    window.location.replace('restrita_medico.php');
+                                                }, 300); // pequeno delay pro modal sumir e para o submit iniciar
                                             });
-                                            
+
                                         };
                                     });
-                                   
                                 </script>
                         <?php
                                 }

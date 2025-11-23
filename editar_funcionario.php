@@ -54,7 +54,7 @@ $funcionario = mysqli_fetch_assoc($result);
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-md">
             <h1 class="text-white">Editar <?= htmlspecialchars($funcao) ?></h1>
-            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair</a></p>
+            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
         </div>
     </nav>
 

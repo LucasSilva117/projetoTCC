@@ -32,7 +32,7 @@ if (!empty($_GET['classificacao'])) {
     $sql .= " AND t.clascRisco = '$classificacao'";
 }
 
-$sql .= " AND a.situacao = 'finalizado'";
+$sql .= " AND a.situacao = 'Finalizado'";
 // Ordenar por mais recente
 $sql .= " ORDER BY a.dataA DESC";
 

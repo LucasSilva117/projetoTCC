@@ -18,7 +18,7 @@ include('protectR.php');
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-md">
             <h1 style="color: white;">Cadastrar paciente</h1>
-            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair</a></p>
+            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
         </div>
     </nav>
     <div class="container-md">

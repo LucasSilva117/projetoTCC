@@ -51,7 +51,7 @@ include('conexao.php');
               <tbody>
                 <?php
 
-                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP, e.nomeE FROM atendimentos a JOIN pacientes p ON a.CPFPf = p.CPFP LEFT JOIN enfermeiros e ON a.CPFEf = e.CPFE WHERE a.situacao IN ('esperando', 'em_atendimento')ORDER BY a.ordem ASC";
+                $sql = "SELECT a.*, p.nomeP, p.idadeP, p.sexoP, e.nomeE FROM atendimentos a JOIN pacientes p ON a.CPFPf = p.CPFP LEFT JOIN enfermeiros e ON a.CPFEf = e.CPFE WHERE a.situacao IN ('Esperando', 'Na triagem')ORDER BY a.ordem ASC";
                 $atendimentos = mysqli_query($conn, $sql);
 
                 if (!$atendimentos) {
