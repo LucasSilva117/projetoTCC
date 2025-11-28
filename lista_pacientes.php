@@ -40,16 +40,40 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restrita recepção</title>
+    <title>Gerenciamento de pacientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <style>
+        .navbar {
+            padding-top: 0;
+            padding-bottom: 0;
+            height: 90px;
+            display: flex;
+            align-items: center;
+        }
 
+        .logo {
+            height: 80px;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 
 <body>
+
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container-md">
-            <h1 style="color: white;">Lista de pacientes</h1>
-            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
+        <div class="container-md d-flex justify-content-between align-items-center">
+
+            <div class="d-flex align-items-center">
+                <img src="sefapslogo.png" alt="logo do hospital" class="logo" />
+                <h1 style="color: white; margin: 0 0 0 10px;">lista de pacientes</h1>
+            </div>
+
+            <p style="margin: 0;">
+                <a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">
+                    Sair da conta
+                </a>
+            </p>
+
         </div>
     </nav>
 
@@ -99,7 +123,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                             </thead>
 
                             <tbody>
-                                <?php 
+                                <?php
                                 if (mysqli_num_rows($query) > 0) {
 
                                     $totalAtendimentos = mysqli_num_rows($query);
@@ -107,24 +131,24 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                     echo "<p>Total de registros: $totalAtendimentos</p>";
                                     while ($row = mysqli_fetch_assoc($query)): ?>
 
-                                <tr>
-                                    <td><?=$row['CPFP']?></td>
-                                    <td><?=$row['nomeP']?></td>
-                                    <td><?=$row['idadeP']?></td>
-                                    <td><?=date('d/m/Y', strtotime($row['datanascP']))?></td>
-                                    <td><?=$row['sexoP']?></td>
-                                    <td>
-                                        <a href="ver_paciente.php?codP=<?=$row['codP']?>" class="btn btn-success btn-sm">Visualizar e editar</a>                                        
-                                        <form action="acoespacientes.php" method="post" class="d-inline">
-                                            <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_paciente" value="<?=$row['codP']?>" class="btn btn-danger btn-sm">
-                                                Excluir
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <?php endwhile; ?>
-                                <?php 
-                                } else{
+                                        <tr>
+                                            <td><?= $row['CPFP'] ?></td>
+                                            <td><?= $row['nomeP'] ?></td>
+                                            <td><?= $row['idadeP'] ?></td>
+                                            <td><?= date('d/m/Y', strtotime($row['datanascP'])) ?></td>
+                                            <td><?= $row['sexoP'] ?></td>
+                                            <td>
+                                                <a href="ver_paciente.php?codP=<?= $row['codP'] ?>" class="btn btn-success btn-sm">Visualizar e editar</a>
+                                                <form action="acoespacientes.php" method="post" class="d-inline">
+                                                    <button onclick="return confirm('Tem certeza que deseja excluir esse paciente?')" type="submit" name="excluir_paciente" value="<?= $row['codP'] ?>" class="btn btn-danger btn-sm">
+                                                        Excluir
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                <?php
+                                } else {
                                     echo '<h5>Nenhum paciente registrado</h5>';
                                 }
                                 ?>

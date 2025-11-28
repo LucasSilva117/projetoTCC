@@ -18,7 +18,8 @@ if ($acao == "cadastrar") {
         $sexo = $_POST['sexo'] ?? null;;
         $senha = isset($_POST['senha']) ? password_hash($_POST['senha'], PASSWORD_DEFAULT) : '';;
 
-        $sql = "INSERT INTO recepcionistas(CPFR, nomeR, datanascR, idadeR, telefoneR, sexoR, senha) VALUES ('$CPF','$nome','$datanasc','$idade','$telefone','$sexo','$senha')";
+        $sql = "INSERT INTO recepcionistas(CPFR, nomeR, datanascR, idadeR, telefoneR, sexoR, senha) 
+        VALUES ('$CPF','$nome','$datanasc','$idade','$telefone','$sexo','$senha')";
         mysqli_query($conn, $sql);
 
         if (mysqli_affected_rows($conn) > 0) {
@@ -203,8 +204,6 @@ if ($acao == "excluir") {
 }
 
 if ($acao == "logar") {
-
-
     if ($funcao == 'recepcionista') {
         $cpf = $_POST['cpf'];
         $senha = $_POST['senha'];

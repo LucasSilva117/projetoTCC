@@ -16,7 +16,8 @@ if (isset($_POST['cadastrar_paciente'])) {
     $UF = $_POST['UFP'] ?? null;;
 
 
-    $sql = "INSERT INTO pacientes(CPFP, RGP, CNSP, nomeP, datanascP, idadeP, telefoneP, sexoP, enderecoP, munResP, UFP) VALUES ('$CPFP','$RGP','$CNSP','$nome','$datanasc','$idade','$telefone','$sexo','$endereco','$munRes','$UF')";
+    $sql = "INSERT INTO pacientes(CPFP, RGP, CNSP, nomeP, datanascP, idadeP, telefoneP, sexoP, enderecoP, munResP, UFP) 
+    VALUES ('$CPFP','$RGP','$CNSP','$nome','$datanasc','$idade','$telefone','$sexo','$endereco','$munRes','$UF')";
     mysqli_query($conn, $sql);
 
     if (mysqli_affected_rows($conn) > 0) {
@@ -61,7 +62,11 @@ if (isset($_POST['editar_paciente']) || (isset($_POST['acao']) && $_POST['acao']
 
 
 
-    $sql = "UPDATE pacientes SET CPFP = '$RG', nomeP = '$nome', datanascP = '$datanasc', idadeP = '$idade', telefoneP = '$telefone', sexoP = '$sexo', enderecoP = '$endereco', munResP = '$munRes', UFP = '$UF' WHERE codP = '$paciente_id'";
+    $sql = "UPDATE pacientes SET CPFP = '$RG', nomeP = '$nome', 
+    datanascP = '$datanasc', idadeP = '$idade', telefoneP = '$telefone',
+    sexoP = '$sexo', enderecoP = '$endereco', munResP = '$munRes',
+    UFP = '$UF' 
+    WHERE codP = '$paciente_id'";
     mysqli_query($conn, $sql);
 
     if (mysqli_affected_rows($conn) > 0) {
@@ -98,7 +103,9 @@ if (isset($_POST['adicionar_atendimento'])) {
     $horaAgora = date('H:i');
 
     // Verifica duplicidade: paciente já adicionado hoje?
-    $check = mysqli_query($conn, "SELECT * FROM atendimentos WHERE CPFPf = '$CPFP' AND dataA = '$dataHoje' AND situacao IN ('Esperando', 'Na triagem', 'Esperando consulta','Na consulta')");
+    $check = mysqli_query($conn, "SELECT * FROM atendimentos 
+    WHERE CPFPf = '$CPFP' AND dataA = '$dataHoje' AND situacao 
+    IN ('Esperando', 'Na triagem', 'Esperando consulta','Na consulta')");
     if (mysqli_num_rows($check) > 0) {
         echo "<script>alert('Paciente já está na lista de atendimento hoje!'); history.back();</script>";
         exit;
@@ -174,8 +181,14 @@ if (isset($_POST['atender_paciente'])) {
     $observacao = $_POST['observacao'] ?? null;
 
 
-    $sql = "INSERT INTO triagens(CPFEf, codAtenf, temDiarreia, tempoSintomas, temAlergia, alergiaAque, tosseMais3sem, colheuBK, pressaoArterial, pulso, frequenciaResp, temperatura, glicemia, SPO, clascRisco, peso, horaT, observacao) VALUES 
-    ('$cpf','$codAten','$temDiarreia','$tempoSintomas','$temAlergia','$alergiaAque','$tosseMais3sem','$colheuBK','$pressaoArterial','$pulso','$frequenciaResp','$temperatura','$glicemia','$SPO','$clascRisco','$peso','$horaT','$observacao')";
+    $sql = "INSERT INTO triagens(CPFEf, codAtenf, temDiarreia, tempoSintomas,
+    temAlergia, alergiaAque, tosseMais3sem, colheuBK, pressaoArterial,
+    pulso, frequenciaResp, temperatura, glicemia, SPO, clascRisco,
+    peso, horaT, observacao) 
+    VALUES 
+    ('$cpf','$codAten','$temDiarreia','$tempoSintomas','$temAlergia','$alergiaAque',
+    '$tosseMais3sem','$colheuBK','$pressaoArterial','$pulso','$frequenciaResp',
+    '$temperatura','$glicemia','$SPO','$clascRisco','$peso','$horaT','$observacao')";
     mysqli_query($conn, $sql);
 
     if (mysqli_affected_rows($conn) > 0) {

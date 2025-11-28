@@ -11,14 +11,38 @@ include('conexao.php');
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Restrita consultório</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<style>
+    .navbar {
+      padding-top: 0;
+      padding-bottom: 0;
+      height: 90px;
+      display: flex;
+      align-items: center;
+    }
 
+    .logo {
+      height: 80px;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 
 <body>
+
   <nav class="navbar navbar-dark bg-dark">
     <div class="container-md d-flex justify-content-between align-items-center">
-      <h1 style="color: white;">Consultório</h1>
-      <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
+
+      <div class="d-flex align-items-center">
+        <img src="sefapslogo.png" alt="logo do hospital" class="logo" />
+        <h1 style="color: white; margin: 0 0 0 10px;">Consultório</h1>
+      </div>
+
+      <p style="margin: 0;">
+        <a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">
+          Sair da conta
+        </a>
+      </p>
+
     </div>
   </nav>
 

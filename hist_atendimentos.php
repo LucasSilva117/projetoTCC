@@ -10,10 +10,12 @@ $cpf = $_GET['cpf'] ?? '';
 // Montando a query base
 $sql = "SELECT a.*, 
                p.*, 
-               t.* 
+               t.*,
+               c.* 
         FROM atendimentos a
         JOIN pacientes p ON a.CPFPf = p.CPFP
         LEFT JOIN triagens t ON t.codAtenf = a.codAten
+        LEFT JOIN consultas c ON c.codAtenf = a.codAten
         WHERE 1=1";
 
 // Se o filtro foi preenchido, adiciona condição
@@ -45,18 +47,42 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restrita triagem</title>
+    <title>Histórico de atendimentos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<style>
+    .navbar {
+      padding-top: 0;
+      padding-bottom: 0;
+      height: 90px;
+      display: flex;
+      align-items: center;
+    }
 
+    .logo {
+      height: 80px;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-md">
-            <h1 style="color: white;">Histórico de atendimentos</h1>
-            <p><a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">Sair da conta</a></p>
-        </div>
-    </nav>
+
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-md d-flex justify-content-between align-items-center">
+
+      <div class="d-flex align-items-center">
+        <img src="sefapslogo.png" alt="logo do hospital" class="logo" />
+        <h1 style="color: white; margin: 0 0 0 10px;">Histórico de atendimentos</h1>
+      </div>
+
+      <p style="margin: 0;">
+        <a href="logout.php" onclick="return confirm('Tem certeza que deseja sair da conta?')">
+          Sair da conta
+        </a>
+      </p>
+
+    </div>
+  </nav>
 
     <div class="container-lg">
         <div class="row">
@@ -101,6 +127,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                     <th>Data</th>
                                     <th>Hora R</th>
                                     <th>Hora T</th>
+                                    <th>Hora C</th>
                                     <th>Classificação</th>
                                     <th>Ação</th>
                                 </tr>
@@ -119,6 +146,7 @@ $query = mysqli_query($conn, $sql) or die("Erro SQL: " . mysqli_error($conn));
                                             <td><?= date('d/m/Y', strtotime($row['dataA'])) ?></td>
                                             <td><?= $row['horaA'] ?></td>
                                             <td><?= $row['horaT'] ?></td>
+                                            <td><?= $row['horaC'] ?></td>
                                             <td><?= $row['clascRisco'] ?></td>
                                             <th>
                                                 <a href="ver_atendimento.php?id=<?= $row['codAtenT'] ?>" class="btn btn-success btn-sm">Visualizar</a>
