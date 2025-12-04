@@ -14,10 +14,11 @@
     }
 
     body {
-      background-image: url('ps.jpg');
+      background-image: url('imagem.jpeg');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
+      min-height: 70vh;
     }
 
     .header {
@@ -36,7 +37,7 @@
     }
 
     .logo {
-      height: 80px;
+      height: 200px;
       margin-top: 30px;
     }
 
@@ -93,7 +94,7 @@
     .box {
       max-width: 320px;
       margin: 200px auto 0;
-      padding: 10px;
+      padding: 15px;
       border-radius: 14px;
       background-color: #fff;
       text-align: center;
@@ -158,46 +159,19 @@
     button:hover {
       background: #24578d;
     }
-    .password {
-      position: relative;
-      width: 280px;
-      height: 40px;
-      margin: 20px auto;
-    }
-
-    .password input {
-      width: 100%;
-      height: 100%;
-      padding: 10px;
-      font-size: 16px;
-      outline: none;
-      border: 2px solid #1a3153;
-      border-radius: 12px;
-      background: transparent;
-      box-shadow: inset 5px 5px 10px #d1d9e6,
-                  inset -5px -5px 10px #fff;
-    }
-
-    .password img {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-      opacity: 0.6;
-    }
-
-    .password img:hover {
-      opacity: 1;
+    .logo {
+      height: 80px;
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
   <header class="header">
-    <img src="sefapslogo.png" alt="logo do hospital" class="logo" />
-   
+    <div class="d-flex align-items-center">
+        <img src="sefapslogo.png" alt="logo do hospital" class="logo" />
+        
+    </div>
+    
 
     <!-- Botão menu -->
     <div class="menu-toggle" id="menu-toggle">
@@ -210,14 +184,15 @@
     <nav id="menu">
       <ul>
       
-        <li><a href="login_adm.php">Login Administrador</a></li>
+       <li><a href="portifolio.php" target="_blank">Portfólio</a></li>
+
       </ul>
     </nav>
   </header>
+
   <div class="box">
     <h2 id="bemvindo">Acesse sua conta!</h2>
-    <p>Bem vindo, por favor efetue seu login. <?= password_hash('1234', PASSWORD_DEFAULT) ?></p>
-    
+    <p>Bem vindo, por favor efetue seu login.</p>
     <div class="formulario">
       <form action="funcionarios.php?acao=logar" method="POST">
         <div class="inputs">
@@ -226,10 +201,9 @@
 
           <label for="senha">Senha</label>
           <input type="password" name="senha" placeholder="Digite sua senha" required id="senha">
-           
 
           <label for="funcao">Função: </label>
-          <select name="funcao" id="funcao" class="form-control">
+          <select name="funcao" id="funcao" class="form-select">
             <option value="">Selecione a sua função</option>
             <option value="recepcionista">Recepcionista</option>
             <option value="enfermeiro">Enfermeiro(a)</option>
@@ -246,9 +220,9 @@
     const toggle = document.getElementById("menu-toggle");
     const menu = document.getElementById("menu");
 
-
-
-    
+    toggle.addEventListener("click", () => {
+      menu.classList.toggle("active");
+    });
   </script>
 </body>
 </html>
